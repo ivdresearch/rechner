@@ -1,0 +1,357 @@
+<!DOCTYPE HTML>
+
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>IVD Research Erschwinglichkeitsrechner</title>
+
+    <link 
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" 
+        rel="stylesheet" 
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" 
+        crossorigin="anonymous"
+    />
+
+    <style>
+        .rightnumber {
+            text-align: right;
+        }
+        .input-group .input-group-text {
+            width: 40px;
+        }
+        #result-container {display: none;}
+    </style>
+</head>
+<body>
+    <div class="container-fluid my-2">
+        <div class="container bg-light">
+            <header class="p-3">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                    <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 text-black text-decoration-none">
+                        <img src="https://ivd.net/wp-content/themes/ivd/Images/logo.svg" alt="IVD Logo" width="40"><use xlink:href="#bootstrap"></use></img>
+                        <span class="fs-4">&nbsp;Research</span>
+                        <span class="fs-4">&nbsp;Erschwinglichkeitsrechner&nbsp;</span>
+                    </a>
+                </div>
+            </header>
+        </div>
+    </div>
+
+    <div class="container-fluid my-2">
+        <div class="container bg-light py-2">
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="preis" class="col-form-label">Kaufpreis:</label>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <input type="number" id="preis" name="preis" value="429000" class="form-control rightnumber" step="5000" min="0">
+                        <span class="input-group-text fw-bold">€</span>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="preishelpline" class="form-text">Kaufpreis in Euro<br>429.000 € entspricht einem durchschnittlichen Kaufpreis für ein bestehendes Einfamilienhaus</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="nebenkosten" class="col-form-label">Kauf&shy;neben&shy;kosten:</label>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <input type="number" id="nebenkosten" name="nebenkosten" value="12.07" class="form-control rightnumber" step="0.1" min="0">
+                        <span class="input-group-text fw-bold">%</span>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="nebenkostenhelpline" class="form-text">Kaufnebenkosten in Prozent<br>12,07% entsprechen zum Beispiel: 6,5 % Grunderwerbsteuer, 3,57 % Maklercourtage, 2 % Notar und Grundbuchamt</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="zinssatz" class="col-form-label">Zinssatz:</label>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <input type="number" id="zinssatz" name="zinssatz" value="3.5" class="form-control rightnumber" step="0.1" min="0">
+                        <span class="input-group-text fw-bold">%</span>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="zinssatzhelpline" class="form-text">Zinssatz in Prozent</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="tilgungssatz" class="col-form-label">Tilgungssatz:</label>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <input type="number" id="tilgungssatz" name="tilgungssatz" value="2.0" class="form-control rightnumber" step="0.1" min="0">
+                        <span class="input-group-text fw-bold">%</span>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="tilgungssatzhelpline" class="form-text">Tilgungssatz in Prozent</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="einkommen" class="col-form-label">Einkommen:</label>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <input type="number" id="einkommen" name="einkommen" value="45000" class="form-control rightnumber" step="500" min="0">
+                        <span class="input-group-text fw-bold">€</span>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="einkommenhelpline" class="form-text">Nettoeinkommen in Euro<br>gegebenenfalls inkl. Kindergeld</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <!-- <span id="einkommen_zeit-label">Einkommen Zeitangabe:</span> -->
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="einkommen_zeit" id="einkommen_zeit_monatlich" value="einkommen_zeit_monatlich">
+                        <label class="form-check-label" for="einkommen_zeit_monatlich">im Monat</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="einkommen_zeit" id="einkommen_zeit_jaehrlich" value="einkommen_zeit_jaehrlich" checked>
+                        <label class="form-check-label" for="einkommen_zeit_jaehrlich">im Jahr</label>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="einkommen_zeithelpline" class="form-text">Auf welchen Zeitraum bezieht sich obige Einkommensangabe?</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="eigenkapital" class="col-form-label">Eigenkapital:</label>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group pb-1">
+                        <input type="number" id="eigenkapital" name="eigenkapital" value="15" class="form-control rightnumber" step="1" min="0">
+                        <span class="input-group-text fw-bold" id="eigenkapital_sign">%</span>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="eigenkapital_angabe" id="eigenkapital_prozent" value="eigenkapital_prozent" checked>
+                        <label class="form-check-label" for="eigenkapital_prozent">in Prozent vom Kaufpreis</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="eigenkapital_angabe" id="eigenkapital_euro" value="eigenkapital_euro">
+                        <label class="form-check-label" for="eigenkapital_euro">in Euro</label>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="eigenkapitalhelpline" class="form-text">Eigenkapital in Prozent<br>Wie viel Eigenkapital anteilig am Kaufpreis kann aufgebracht werden? Beachten Sie, dass die Kaufnebenkosten ebenfalls aus Eigenkapital beglichen werden.</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" id="calculate" class="btn btn-primary btn-sm">Berechnen</button>
+                </div>
+                <div class="col-md-7">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid my-2" id="result-container">
+        <div class="container bg-light py-2">
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2"></div>
+                <div class="col-md-3"><h3>Ergebnisse</h3></div>
+                <div class="col-md-7"></div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="gesamtkosten" class="col-form-label">Gesamtkosten:</label>
+                </div>
+                <div class="col-md-3 text-end">
+                    <div class="input-group">
+                        <input type="text" id="gesamtkosten" name="gesamtkosten" class="form-control rightnumber" readonly>
+                        <span class="input-group-text fw-bold">€</span>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="gesamtkostenhelpline" class="form-text">Gesamtkosten in Euro</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="eigenkapital_benoetigt" class="col-form-label">Eigenkapital:</label>
+                </div>
+                <div class="col-md-3 text-end">
+                    <div class="input-group">
+                        <input type="text" id="eigenkapital_benoetigt" name="eigenkapital_benoetigt" class="form-control rightnumber" readonly>
+                        <span class="input-group-text fw-bold">€</span>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="eigenkapital_benoetigthelpline" class="form-text"></span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="kredithoehe" class="col-form-label">Kredithöhe:</label>
+                </div>
+                <div class="col-md-3 text-end">
+                    <div class="input-group">
+                        <input type="text" id="kredithoehe" name="kredithoehe" class="form-control rightnumber" readonly>
+                        <span class="input-group-text fw-bold">€</span>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="kredithoehehelpline" class="form-text"></span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="kreditbelastung" class="col-form-label">Kredit&shy;belastung pro Monat:</label>
+                </div>
+                <div class="col-md-3 text-end">
+                    <div class="input-group">
+                        <input type="text" id="kreditbelastung" name="kreditbelastung" class="form-control rightnumber" readonly>
+                        <span class="input-group-text fw-bold">€</span>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="kreditbelastunghelpline" class="form-text">Kreditbelastung pro Monat in Euro</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="kreditbelastung-anteil" class="col-form-label">Anteil Kredit&shy;belastung am Einkommen:</label>
+                </div>
+                <div class="col-md-3 text-end">
+                    <div class="input-group">
+                        <input type="text" id="kreditbelastung-anteil" name="kreditbelastung-anteil" class="form-control rightnumber" readonly>
+                        <span class="input-group-text fw-bold">%</span>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="kreditbelastung-anteilhelpline" class="form-text">anteilige Kreditbelastung am Einkommen in Prozent</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2"></div>
+                <div class="col-md-3">
+                    <button type="button" id="print" class="btn btn-outline-secondary btn-sm" onclick="window.print()">Druckvorschau</button>
+                </div>
+                <div class="col-md-7"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid my-2">
+        <div class="container bg-light">
+            <footer class="py-2">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <div class="container-fluid">
+                        <div class="navbar-collapse" id="navbar-footer">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">© 2023 IVD Research</li>
+                            </ul>
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item"><a href="https://www.ivd.net" class="nav-link px-2 text-muted">IVD Homepage</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </footer>
+        </div>
+    </div>
+
+    <script 
+        src="https://code.jquery.com/jquery-3.6.3.min.js" 
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" 
+        crossorigin="anonymous">
+    </script>
+    <script>
+        $("#eigenkapital_prozent").click(function() {
+            $("#eigenkapital").val(15);
+            $("#eigenkapital").attr("step", "1");
+            $("#eigenkapital_sign").text("%")
+            $("#eigenkapitalhelpline").html("Eigenkapital in Prozent<br>Wie viel Eigenkapital anteilig am Kaufpreis kann aufgebracht werden? Beachten Sie, dass die Kaufnebenkosten ebenfalls aus Eigenkapital beglichen werden.")
+        });
+
+        $("#eigenkapital_euro").click(function() {
+            var preis = parseInt($("#preis").val(), 10);
+            var nebenkosten = parseFloat($("#nebenkosten").val());
+            var nebenkosten_summe = preis * ((15 + nebenkosten) / 100);
+            $("#eigenkapital").val(parseInt(nebenkosten_summe, 10));
+            $("#eigenkapital").attr("step", "1000");
+            $("#eigenkapital_sign").text("€")
+            $("#eigenkapitalhelpline").html("Eigenkapital in Euro<br>Wie viel Eigenkapital wollen Sie aufbringen? Beachten Sie, dass das Eigenkapital zumindest die Kaufnebenkosten abdecken sollte.")
+        });
+
+        $("#calculate").click(function() {calculator()});
+        
+        function calculator() {
+            var preis = parseInt($("#preis").val(), 10);
+            var nebenkosten = parseFloat($("#nebenkosten").val());
+            var gesamtkosten = preis * ((100 + nebenkosten) / 100);
+            var nebenkosten_summe = gesamtkosten - preis;
+
+            if ($("#eigenkapital_prozent").prop("checked")) {
+                var eigenkapital = parseFloat($("#eigenkapital").val());
+                var fremdkapital = preis * ((100 - eigenkapital) / 100);
+                eigenkapital = gesamtkosten - fremdkapital;
+                $("#eigenkapital_benoetigthelpline").removeClass("text-danger");
+                $("#eigenkapital_benoetigthelpline").text("Eigenkapital in Euro");
+            } else {
+                var eigenkapital = parseFloat($("#eigenkapital").val());
+                var fremdkapital = gesamtkosten - eigenkapital;
+                if (eigenkapital < nebenkosten_summe) {
+                    $("#eigenkapital_benoetigthelpline").addClass("text-danger");
+                    $("#eigenkapital_benoetigthelpline").html('Eigenkapital in Euro<br>Das Eigenkapital sollte einen Betrag von <strong>' + parseInt(nebenkosten_summe, 10).toLocaleString() + ' Euro </strong> nicht unterschreiten, damit die Nebenkosten gedeckt sind.');
+                } else {
+                    $("#eigenkapital_benoetigthelpline").removeClass("text-danger");
+                    $("#eigenkapital_benoetigthelpline").text("Eigenkapital in Euro");
+                }
+            }
+            var beleihungsauslauf = (fremdkapital / preis) * 100;
+
+            var einkommen = parseInt($("#einkommen").val(), 10);
+            if ($("#einkommen_zeit_monatlich").prop("checked")) {
+                einkommen *= 12;
+            }
+
+            var zinssatz = parseFloat($("#zinssatz").val());
+            var tilgungssatz = parseFloat($("#tilgungssatz").val());
+            var kreditbelastung_pa = fremdkapital * ((zinssatz + tilgungssatz) / 100);
+            var kreditbelastung_pm = kreditbelastung_pa / 12;
+            var kreditbelastung_anteilig = kreditbelastung_pa * 100 / einkommen;
+
+            if (fremdkapital <= 0) {
+                fremdkapital = 0;
+                kreditbelastung_pa = 0;
+                kreditbelastung_pm = 0;
+                kreditbelastung_anteilig = 0;
+                beleihungsauslauf = 0;
+            }
+
+            $("#result-container").css("display", "block");
+            $("#gesamtkosten").val(parseInt(gesamtkosten, 10).toLocaleString());
+            $("#eigenkapital_benoetigt").val(parseInt(eigenkapital, 10).toLocaleString());
+            $("#kredithoehe").val(parseInt(fremdkapital, 10).toLocaleString());
+            $("#kreditbelastung").val(parseInt(kreditbelastung_pm, 10).toLocaleString());
+            $("#kreditbelastung-anteil").val(kreditbelastung_anteilig.toFixed(1).toLocaleString().replace(".", ","));
+            $("#kredithoehehelpline").html("Kredithöhe in Euro<br>Dies entspricht einem Fremdkapitalanteil von <strong>" + parseInt(beleihungsauslauf, 10).toLocaleString() + "</strong> Prozent am Kaufpreis.");
+        }
+    </script>
+
+    <script 
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" 
+        crossorigin="anonymous">
+    </script>
+</body>
+</html>
