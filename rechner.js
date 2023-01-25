@@ -61,6 +61,11 @@ function reset_eigenkapital_prozent() {
     $("#eigenkapital_helpline").html("Eigenkapital in Prozent<br>Wie viel Eigenkapital anteilig am Kaufpreis kann aufgebracht werden? Beachten Sie, dass die Kaufnebenkosten ebenfalls aus Eigenkapital beglichen werden.");
 }
 
+function calculate_rueckzahlungsdauer(kredit, annuitaet, zinssatz) {
+    // Annuität pro Jahr
+    return (Math.log(annuitaet) - Math.log(annuitaet - (zinssatz * kredit))) / Math.log(1 + zinssatz);
+}
+
 function calculator_belastung() {
     $("#result-container").css("display", "block");
 
@@ -94,14 +99,16 @@ function calculator_belastung() {
         einkommen *= 12;
     }
 
-    let zinssatz = parseFloat($("#zinssatz").val());
-    let tilgungssatz = parseFloat($("#tilgungssatz").val());
-    let kreditbelastung_pa = fremdkapital * ((zinssatz + tilgungssatz) / 100);
+    let zinssatz = parseFloat($("#zinssatz").val()) / 100;
+    let tilgungssatz = parseFloat($("#tilgungssatz").val()) / 100;
+    let kreditbelastung_pa = fremdkapital * (zinssatz + tilgungssatz);
     let kreditbelastung_pm = kreditbelastung_pa / 12;
     let kreditbelastung_anteilig = kreditbelastung_pa * 100 / einkommen;
+    let rueckzahlungsdauer = calculate_rueckzahlungsdauer(fremdkapital, kreditbelastung_pa, zinssatz);
 
     if (fremdkapital <= 0) {
         fremdkapital = 0;
+        rueckzahlungsdauer = 0;
         kreditbelastung_pa = 0;
         kreditbelastung_pm = 0;
         kreditbelastung_anteilig = 0;
@@ -114,6 +121,7 @@ function calculator_belastung() {
     $("#kreditbelastung").val(kreditbelastung_pm.toFixed().toLocaleString());
     $("#kreditbelastung-anteil").val(kreditbelastung_anteilig.toFixed(1).toLocaleString().replace(".", ","));
     $("#kredithoehe_helpline").html("Kredithöhe in Euro<br>Dies entspricht einem Fremdkapitalanteil von <strong>" + beleihungsauslauf.toFixed().toLocaleString() + "</strong> Prozent am Kaufpreis.");
+    $("#rueckzahlungsdauer").val(rueckzahlungsdauer.toFixed(1).toLocaleString().replace(".", ","));
 }
 
 function calculator_leistbarkeit() {
@@ -143,6 +151,7 @@ function calculator_leistbarkeit() {
     let annuitaet_pa = fremdkapital * ((zinssatz + tilgungssatz) / 100);
     let annuitaet_pm = annuitaet_pa / 12;
     let einkommenbelastung_final = (annuitaet_pa / einkommen) * 100;
+    let rueckzahlungsdauer = calculate_rueckzahlungsdauer(fremdkapital, annuitaet_pa, zinssatz);
 
     // $("#result-container").css("display", "block");
     $("#l_kaufpreis").val(kaufpreis.toFixed().toLocaleString());
@@ -152,4 +161,5 @@ function calculator_leistbarkeit() {
     $("#l_eigenkapitalanteil_final").val(eigenkapital_anteil_final.toFixed(1).toLocaleString().replace(".", ","));
     $("#kreditbelastung").val(annuitaet_pm.toFixed().toLocaleString());
     $("#kreditbelastung-anteil").val(einkommenbelastung_final.toFixed(1).toLocaleString().replace(".", ","));
+    $("#rueckzahlungsdauer").val(rueckzahlungsdauer.toFixed(1).toLocaleString().replace(".", ","));
 }

@@ -329,6 +329,20 @@
                 </div>
             </div>
             <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="rueckzahlungsdauer" class="col-form-label">Rück&shy;zahlungs&shy;dauer des Kredits:</label>
+                </div>
+                <div class="col-md-3 text-end">
+                    <div class="input-group">
+                        <input type="text" id="rueckzahlungsdauer" name="rueckzahlungsdauer" class="form-control rightnumber" readonly>
+                        <span class="input-group-text fw-bold"></span>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="rueckzahlungsdauer_helpline" class="form-text">Dauer in Jahren, bis der Kredit zurückgezahlt wäre</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
                 <div class="col-md-2"></div>
                 <div class="col-md-3">
                     <button type="button" id="print" class="btn btn-outline-secondary btn-sm" onclick="window.print()">Druckvorschau</button>
