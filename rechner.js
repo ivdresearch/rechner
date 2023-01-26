@@ -139,16 +139,16 @@ function calculator_leistbarkeit() {
     }
 
     let annuitaet_max = einkommen * (einkommenbelastung / 100);
-    let zinssatz = parseFloat($("#zinssatz").val());
-    let tilgungssatz = parseFloat($("#tilgungssatz").val());
-    let fremdkapital_v1 = annuitaet_max / ((zinssatz + tilgungssatz) / 100);
+    let zinssatz = parseFloat($("#zinssatz").val()) / 100;
+    let tilgungssatz = parseFloat($("#tilgungssatz").val()) / 100;
+    let fremdkapital_v1 = annuitaet_max / (zinssatz + tilgungssatz);
     let fremdkapital_v2 = (eigenkapital * (fremdkapital_anteil / 100)) / ((nebenkosten + eigenkapital_anteil) / 100);
     let fremdkapital = Math.min(fremdkapital_v1, fremdkapital_v2);
     
     let gesamtkosten = eigenkapital + fremdkapital;
     let kaufpreis = gesamtkosten / (1 + (nebenkosten / 100));
     let eigenkapital_anteil_final = (1 - (fremdkapital / kaufpreis)) * 100;
-    let annuitaet_pa = fremdkapital * ((zinssatz + tilgungssatz) / 100);
+    let annuitaet_pa = fremdkapital * (zinssatz + tilgungssatz);
     let annuitaet_pm = annuitaet_pa / 12;
     let einkommenbelastung_final = (annuitaet_pa / einkommen) * 100;
     let rueckzahlungsdauer = calculate_rueckzahlungsdauer(fremdkapital, annuitaet_pa, zinssatz);
