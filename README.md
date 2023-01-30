@@ -1,7 +1,7 @@
-# rechner
-IVD Leistbarkeitsrechner zur freien Nutzung
+# IVD Leistbarkeitsrechner
+Zur freien Nutzung soweit Logo und Copyright sichtbar bleiben
 
 # Komponenten
-rechner.html
-rechner.js
+rechner.html<br />
+rechner.js<br />
 Internetverbindung für Bootstrap- und JQuery-Einbindung
