@@ -10,7 +10,7 @@ $("#calculate").click(function() {
 
 $("#auswahl_berechnung_belastung").click(function() {
     $("#result-container").css("display", "none");
-    $("#headline").html("&nbsp;Belastungsrechner&nbsp;");
+    // $("#headline").html("&nbsp;Leistbarkeitsrechner&nbsp;");
     $(".container-belastung").css({"display": ""});
     $(".container-leistbarkeit").css({"display": "none"});
     reset_eigenkapital_prozent();
@@ -18,7 +18,7 @@ $("#auswahl_berechnung_belastung").click(function() {
 
 $("#auswahl_berechnung_leistbarkeit").click(function() {
     $("#result-container").css("display", "none");
-    $("#headline").html("&nbsp;Leistbarkeitsrechner&nbsp;");
+    // $("#headline").html("&nbsp;Leistbarkeitsrechner&nbsp;");
     $(".container-belastung").css({"display": "none"});
     $(".container-leistbarkeit").css({"display": "flex"});
     let eigenkapital = $("#eigenkapital");
