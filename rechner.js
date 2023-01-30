@@ -62,8 +62,9 @@ function reset_eigenkapital_prozent() {
 }
 
 function calculate_rueckzahlungsdauer(kredit, annuitaet, zinssatz) {
-    // Annuität pro Jahr
-    return (Math.log(annuitaet) - Math.log(annuitaet - (zinssatz * kredit))) / Math.log(1 + zinssatz);
+    // Annuität pro Monat
+    zinssatz = zinssatz / 12;
+    return ((Math.log(annuitaet) - Math.log(annuitaet - (zinssatz * kredit))) / Math.log(1 + zinssatz)) / 12;
 }
 
 function calculator_belastung() {
@@ -75,22 +76,24 @@ function calculator_belastung() {
     let nebenkosten_summe = gesamtkosten - preis;
 
     let fremdkapital;
-    let eigenkapital = parseFloat($("#eigenkapital").val());
+    let eigenkapital_eingabe = parseFloat($("#eigenkapital").val());
+    let eigenkapital = eigenkapital_eingabe;
     let eigenkapitel_helpline = $("#e_eigenkapital_benoetigt_helpline");
     if (e_eigenkapital_prozent.prop("checked")) {
         fremdkapital = preis * ((100 - eigenkapital) / 100);
         eigenkapital = gesamtkosten - fremdkapital;
-        eigenkapitel_helpline.removeClass("text-danger");
-        eigenkapitel_helpline.text("Eigenkapital in Euro");
     } else {
         fremdkapital = gesamtkosten - eigenkapital;
-        if (eigenkapital < nebenkosten_summe) {
-            eigenkapitel_helpline.addClass("text-danger");
-            eigenkapitel_helpline.html('Eigenkapital in Euro<br>Das Eigenkapital sollte einen Betrag von <strong>' + nebenkosten_summe.toFixed().toLocaleString() + ' Euro </strong> nicht unterschreiten, damit die Nebenkosten gedeckt sind.');
-        } else {
-            eigenkapitel_helpline.removeClass("text-danger");
-            eigenkapitel_helpline.text("Eigenkapital in Euro");
-        }
+    }
+    if (eigenkapital < nebenkosten_summe) {
+        eigenkapitel_helpline.addClass("text-danger");
+        eigenkapitel_helpline.html('Eigenkapital in Euro<br>Das Eigenkapital sollte einen Betrag von <strong>' + nebenkosten_summe.toFixed().toLocaleString() + ' Euro </strong> nicht unterschreiten, damit die Nebenkosten gedeckt sind.');
+    } else if (e_eigenkapital_prozent.prop("checked")) {
+        eigenkapitel_helpline.removeClass("text-danger");
+        eigenkapitel_helpline.html("Eigenkapital in Euro<br>Dies entspricht einem Eigenkapitalanteil von <strong>" + eigenkapital_eingabe.toFixed().toLocaleString() + "</strong> Prozent am Kaufpreis zzgl. der Kaufnebenkosten.");
+    } else {
+        eigenkapitel_helpline.removeClass("text-danger");
+        eigenkapitel_helpline.text("Eigenkapital in Euro");
     }
     let beleihungsauslauf = (fremdkapital / preis) * 100;
 
@@ -104,7 +107,7 @@ function calculator_belastung() {
     let kreditbelastung_pa = fremdkapital * (zinssatz + tilgungssatz);
     let kreditbelastung_pm = kreditbelastung_pa / 12;
     let kreditbelastung_anteilig = kreditbelastung_pa * 100 / einkommen;
-    let rueckzahlungsdauer = calculate_rueckzahlungsdauer(fremdkapital, kreditbelastung_pa, zinssatz);
+    let rueckzahlungsdauer = calculate_rueckzahlungsdauer(fremdkapital, kreditbelastung_pm, zinssatz);
 
     if (fremdkapital <= 0) {
         fremdkapital = 0;
@@ -151,7 +154,7 @@ function calculator_leistbarkeit() {
     let annuitaet_pa = fremdkapital * (zinssatz + tilgungssatz);
     let annuitaet_pm = annuitaet_pa / 12;
     let einkommenbelastung_final = (annuitaet_pa / einkommen) * 100;
-    let rueckzahlungsdauer = calculate_rueckzahlungsdauer(fremdkapital, annuitaet_pa, zinssatz);
+    let rueckzahlungsdauer = calculate_rueckzahlungsdauer(fremdkapital, annuitaet_pm, zinssatz);
 
     // $("#result-container").css("display", "block");
     $("#l_kaufpreis").val(kaufpreis.toFixed().toLocaleString());
