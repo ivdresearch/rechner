@@ -114,6 +114,30 @@
                     <span id="nebenkosten_helpline" class="form-text">Kaufnebenkosten in Prozent<br>12,07% entsprechen zum Beispiel: 6,5 % Grunderwerbsteuer, 3,57 % Maklercourtage, 2 % Notar und Grundbuchamt</span>
                 </div>
             </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="zinsvergleich1" class="col-form-label">Zinsvergleich #1:</label>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="zinsvergleich1" aria-label="SelectZinsvergleich1">
+                    </select>
+                </div>
+                <div class="col-md-7">
+                    <span id="zinsvergleich1_helpline" class="form-text">Das Ergebnis wird mit den durchschnittlichen Zinsen zum ausgewählten Zeitpunkt verglichen</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="zinsvergleich2" class="col-form-label">Zinsvergleich #2:</label>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="zinsvergleich2" aria-label="SelectZinsvergleich2">
+                    </select>
+                </div>
+                <div class="col-md-7">
+                    <span id="zinsvergleich2_helpline" class="form-text">Das Ergebnis wird mit den durchschnittlichen Zinsen zum ausgewählten Zeitpunkt verglichen</span>
+                </div>
+            </div>
             <div class="row py-2 mt-1 align-items-center">
                 <div class="col-md-2">
                 </div>
@@ -132,151 +156,48 @@
             </div>
         </div>
     </div>
-<!--
-    <div class="container-fluid my-2 single-result" id="result-container">
-        <div class="container bg-light py-2">
-            <div class="row py-1 align-items-center">
-                <div class="col-md-2"></div>
-                <div class="col-md-3"><h3>Ergebnisse</h3></div>
-                <div class="col-md-7"></div>
-            </div>
-            <div class="row py-1 align-items-center">
-                <div class="col-md-2 text-end">
-                    <label for="kaufpreis" class="col-form-label">Kaufpreis:</label>
-                </div>
-                <div class="col-md-3 text-end">
-                    <div class="input-group">
-                        <input type="text" id="kaufpreis" name="kaufpreis" class="form-control rightnumber" readonly>
-                        <span class="input-group-text fw-bold">€</span>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <span id="aufpreis_helpline" class="form-text">maximaler Kaufpreis in Euro</span>
-                </div>
-            </div>
-            <div class="row py-1 align-items-center">
-                <div class="col-md-2 text-end">
-                    <label for="gesamtkosten" class="col-form-label">Gesamtkosten:</label>
-                </div>
-                <div class="col-md-3 text-end">
-                    <div class="input-group">
-                        <input type="text" id="gesamtkosten" name="gesamtkosten" class="form-control rightnumber" readonly>
-                        <span class="input-group-text fw-bold">€</span>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <span id="gesamtkosten_helpline" class="form-text">Gesamtkosten in Euro</span>
-                </div>
-            </div>
-            <div class="row py-1 align-items-center">
-                <div class="col-md-2 text-end">
-                    <label for="kredithoehe" class="col-form-label">Kredithöhe:</label>
-                </div>
-                <div class="col-md-3 text-end">
-                    <div class="input-group">
-                        <input type="text" id="kredithoehe" name="kredithoehe" class="form-control rightnumber" readonly>
-                        <span class="input-group-text fw-bold">€</span>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <span id="kredithoehe_helpline" class="form-text">Kredithöhe in Euro</span>
-                </div>
-            </div>
-            <div class="row py-1 align-items-center">
-                <div class="col-md-2 text-end">
-                    <label for="eigenkapital_anteilig" class="col-form-label">Eigen&shy;kapital&shy;anteil am Kaufpreis:</label>
-                </div>
-                <div class="col-md-3 text-end">
-                    <div class="input-group">
-                        <input type="text" id="eigenkapital_anteilig" name="eigenkapital_anteilig" class="form-control rightnumber" readonly>
-                        <span class="input-group-text fw-bold">%</span>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <span id="eigenkapital_anteilig_helpline" class="form-text">Anteil des Eigenkapitals am Kaufpreis</span>
-                </div>
-            </div>
-            <div class="row py-1 align-items-center">
-                <div class="col-md-2 text-end">
-                    <label for="rueckzahlungsdauer" class="col-form-label">Rück&shy;zahlungs&shy;dauer des Kredits:</label>
-                </div>
-                <div class="col-md-3 text-end">
-                    <div class="input-group">
-                        <input type="text" id="rueckzahlungsdauer" name="rueckzahlungsdauer" class="form-control rightnumber" readonly>
-                        <span class="input-group-text fw-bold"></span>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <span id="rueckzahlungsdauer_helpline" class="form-text">Dauer in Jahren, bis der Kredit zurückgezahlt wäre</span>
-                </div>
-            </div>
-            <div class="row py-1 align-items-center">
-                <div class="col-md-2"></div>
-                <div class="col-md-3">
-                    <button type="button" id="print" class="btn btn-outline-secondary btn-sm" onclick="window.print()">Druckvorschau</button>
-                </div>
-                <div class="col-md-7"></div>
-            </div>
-        </div>
-    </div>
--->
     <div class="container-fluid my-2 multiple-result" id="result-container">
         <div class="container bg-light py-2">
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
-                            Eingabeergebnis
+                            Ergebnisse der Eingabe
                         </div>
                         <div class="card-body">
-                            <div class="row py-1 align-items-center">
-                                <label for="kaufpreis" class="col-form-label">Kaufpreis:</label>
-                                <div class="input-group">
-                                    <input type="text" id="kaufpreis" name="kaufpreis" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold">€</span>
-                                </div>
+                            <div class="row py-0">
+                                <div class="col-8">Kaufpreis:</div>
+                                <div class="col-4 fw-bold text-end"><span id="kaufpreis"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
+                            <div class="row py-0 result-description">
                                 <span id="kaufpreis_helpline" class="form-text">maximaler Kaufpreis in Euro</span>
                             </div>
-                            <div class="row py-1 align-items-center">
-                                <label for="gesamtkosten" class="col-form-label">Gesamtkosten:</label>
-                                <div class="input-group">
-                                    <input type="text" id="gesamtkosten" name="gesamtkosten" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold">€</span>
-                                </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-8">Gesamtkosten:</div>
+                                <div class="col-4 fw-bold text-end"><span id="gesamtkosten"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
+                            <div class="row py-0 result-description">
                                 <span id="gesamtkosten_helpline" class="form-text">Gesamtkosten in Euro</span>
                             </div>
-                            <div class="row py-1 align-items-center">
-                                <label for="kredithoehe" class="col-form-label">Kredithöhe:</label>
-                                <div class="input-group">
-                                    <input type="text" id="kredithoehe" name="kredithoehe" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold">€</span>
-                                </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-8">Kredithöhe:</div>
+                                <div class="col-4 fw-bold text-end"><span id="kredithoehe"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
+                            <div class="row py-0 result-description">
                                 <span id="kredithoehe_helpline" class="form-text">Kredithöhe in Euro</span>
                             </div>
-                            <div class="row py-1 align-items-center">
-                                <label for="eigenkapital_anteilig" class="col-form-label">Eigen&shy;kapital&shy;anteil am Kaufpreis:</label>
-                                <div class="input-group">
-                                    <input type="text" id="eigenkapital_anteilig" name="eigenkapital_anteilig" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold">%</span>
-                                </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-8">Eigen&shy;kapital&shy;anteil am Kaufpreis:</div>
+                                <div class="col-4 fw-bold text-end"><span id="eigenkapital_anteilig"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
+                            <div class="row py-0 result-description">
                                 <span id="eigenkapital_anteilig_helpline" class="form-text">Anteil des Eigenkapitals am Kaufpreis</span>
                             </div>
-                            <div class="row py-1 align-items-center">
-                                <label for="rueckzahlungsdauer" class="col-form-label">Rück&shy;zahlungs&shy;dauer des Kredits:</label>
-                                <div class="input-group">
-                                    <input type="text" id="rueckzahlungsdauer" name="rueckzahlungsdauer" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold"></span>
-                                </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-8">Rück&shy;zahlungs&shy;dauer des Kredits:</div>
+                                <div class="col-4 fw-bold text-end"><span id="rueckzahlungsdauer"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
+                            <div class="row py-0 result-description">
                                 <span id="rueckzahlungsdauer_helpline" class="form-text">Dauer in Jahren, bis der Kredit zurückgezahlt wäre</span>
                             </div>
                         </div>
@@ -284,138 +205,102 @@
                 </div>
                 <div class="col">
                     <div class="card">
-                        <div class="card-header text-white bg-success">
-                            Ergebnisse beim Zinssatz von vor einem Jahr
+                        <div class="card-header" id="first_comparison_header_div">
+                            Ergebnisse bei einem Zinssatz vom <span id="first_comparison_header"></span>
                         </div>
                         <div class="card-body">
-                            <div class="row py-1 align-items-center">
-                                <label for="kaufpreis_one_year" class="col-form-label">Kaufpreis:</label>
-                                <div class="input-group">
-                                    <input type="text" id="kaufpreis_one_year" name="kaufpreis_one_year" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold">€</span>
-                                </div>
+                            <div class="row py-0">
+                                <div class="col-8">Kaufpreis:</div>
+                                <div class="col-4 fw-bold text-end"><span id="kaufpreis_first_comparison"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
-                                <span id="kaufpreis_one_year_helpline" class="form-text">maximaler Kaufpreis in Euro</span>
+                            <div class="row py-0 result-description">
+                                <span id="kaufpreis_first_comparison_helpline" class="form-text">maximaler Kaufpreis in Euro</span>
                             </div>
-                            <div class="row py-1 align-items-center">
-                                <label for="gesamtkosten_one_year" class="col-form-label">Gesamtkosten:</label>
-                                <div class="input-group">
-                                    <input type="text" id="gesamtkosten_one_year" name="gesamtkosten_one_year" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold">€</span>
-                                </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-8">Gesamtkosten:</div>
+                                <div class="col-4 fw-bold text-end"><span id="gesamtkosten_first_comparison"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
-                                <span id="gesamtkosten_one_year_helpline" class="form-text">Gesamtkosten in Euro</span>
+                            <div class="row py-0 result-description">
+                                <span id="gesamtkosten_first_comparison_helpline" class="form-text">Gesamtkosten in Euro</span>
                             </div>
-                            <div class="row py-1 align-items-center">
-                                <label for="kredithoehe_one_year" class="col-form-label">Kredithöhe:</label>
-                                <div class="input-group">
-                                    <input type="text" id="kredithoehe_one_year" name="kredithoehe_one_year" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold">€</span>
-                                </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-8">Kredithöhe:</div>
+                                <div class="col-4 fw-bold text-end"><span id="kredithoehe_first_comparison"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
-                                <span id="kredithoehe_one_year_helpline" class="form-text">Kredithöhe in Euro</span>
+                            <div class="row py-0 result-description">
+                                <span id="kredithoehe_first_comparison_helpline" class="form-text">Kredithöhe in Euro</span>
                             </div>
-                            <div class="row py-1 align-items-center">
-                                <label for="eigenkapital_one_year_anteilig" class="col-form-label">Eigen&shy;kapital&shy;anteil am Kaufpreis:</label>
-                                <div class="input-group">
-                                    <input type="text" id="eigenkapital_one_year_anteilig" name="eigenkapital_one_year_anteilig" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold">%</span>
-                                </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-8">Eigen&shy;kapital&shy;anteil am Kaufpreis:</div>
+                                <div class="col-4 fw-bold text-end"><span id="eigenkapital_first_comparison_anteilig"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
-                                <span id="eigenkapital_one_year_anteilig_helpline" class="form-text">Anteil des Eigenkapitals am Kaufpreis</span>
+                            <div class="row py-0 result-description">
+                                <span id="eigenkapital_first_comparison_anteilig_helpline" class="form-text">Anteil des Eigenkapitals am Kaufpreis</span>
                             </div>
-                            <div class="row py-1 align-items-center">
-                                <label for="rueckzahlungsdauer_one_year" class="col-form-label">Rück&shy;zahlungs&shy;dauer des Kredits:</label>
-                                <div class="input-group">
-                                    <input type="text" id="rueckzahlungsdauer_one_year" name="rueckzahlungsdauer_one_year" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold"></span>
-                                </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-8">Rück&shy;zahlungs&shy;dauer des Kredits:</div>
+                                <div class="col-4 fw-bold text-end"><span id="rueckzahlungsdauer_first_comparison"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
-                                <span id="rueckzahlungsdauer_one_year_helpline" class="form-text">Dauer in Jahren, bis der Kredit zurückgezahlt wäre</span>
+                            <div class="row py-0 result-description">
+                                <span id="rueckzahlungsdauer_first_comparison_helpline" class="form-text">Dauer in Jahren, bis der Kredit zurückgezahlt wäre</span>
                             </div>
-                            <div class="row py-1 align-items-center">
-                                <label for="zinssatz_one_year" class="col-form-label">Zinssatz:</label>
-                                <div class="input-group">
-                                    <input type="text" id="zinssatz_one_year" name="zinssatz_one_year" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold">%</span>
-                                </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-8">Zinssatz im <span id="zinssatz_first_comparison_date" class="text-decoration-underline"></span>:</div>
+                                <div class="col-4 fw-bold text-end"><span id="zinssatz_first_comparison"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
-                                <span id="zinssatz_one_year_helpline" class="form-text">Zinssatz vor einem Jahr für eine anfängliche Zinsbindung von 5 bis 10 Jahren</span>
+                            <div class="row py-0 result-description">
+                                <span id="zinssatz_first_comparison_helpline" class="form-text">Zinssatz für eine anfängliche Zinsbindung von 5 bis 10 Jahren</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col">
                     <div class="card">
-                        <div class="card-header text-white bg-success">
-                            Ergebnisse beim Zinssatz von vor zwei Jahren
+                        <div class="card-header" id="second_comparison_header_div">
+                            Ergebnisse bei einem Zinssatz vom <span id="second_comparison_header"></span>
                         </div>
                         <div class="card-body">
-                            <div class="row py-1 align-items-center">
-                                <label for="kaufpreis_two_years" class="col-form-label">Kaufpreis:</label>
-                                <div class="input-group">
-                                    <input type="text" id="kaufpreis_two_years" name="kaufpreis_two_years" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold">€</span>
-                                </div>
+                            <div class="row py-0">
+                                <div class="col-8">Kaufpreis:</div>
+                                <div class="col-4 fw-bold text-end"><span id="kaufpreis_second_comparison"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
-                                <span id="kaufpreis_two_years_helpline" class="form-text">maximaler Kaufpreis in Euro</span>
+                            <div class="row py-0 result-description">
+                                <span id="kaufpreis_second_comparison_helpline" class="form-text">maximaler Kaufpreis in Euro</span>
                             </div>
-                            <div class="row py-1 align-items-center">
-                                <label for="gesamtkosten_two_years" class="col-form-label">Gesamtkosten:</label>
-                                <div class="input-group">
-                                    <input type="text" id="gesamtkosten_two_years" name="gesamtkosten_two_years" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold">€</span>
-                                </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-8">Gesamtkosten:</div>
+                                <div class="col-4 fw-bold text-end"><span id="gesamtkosten_second_comparison"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
-                                <span id="gesamtkosten_two_years_helpline" class="form-text">Gesamtkosten in Euro</span>
+                            <div class="row py-0 result-description">
+                                <span id="gesamtkosten_second_comparison_helpline" class="form-text">Gesamtkosten in Euro</span>
                             </div>
-                            <div class="row py-1 align-items-center">
-                                <label for="kredithoehe_two_years" class="col-form-label">Kredithöhe:</label>
-                                <div class="input-group">
-                                    <input type="text" id="kredithoehe_two_years" name="kredithoehe_two_years" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold">€</span>
-                                </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-8">Kredithöhe:</div>
+                                <div class="col-4 fw-bold text-end"><span id="kredithoehe_second_comparison"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
-                                <span id="kredithoehe_two_years_helpline" class="form-text">Kredithöhe in Euro</span>
+                            <div class="row py-0 result-description">
+                                <span id="kredithoehe_second_comparison_helpline" class="form-text">Kredithöhe in Euro</span>
                             </div>
-                            <div class="row py-1 align-items-center">
-                                <label for="eigenkapital_two_years_anteilig" class="col-form-label">Eigen&shy;kapital&shy;anteil am Kaufpreis:</label>
-                                <div class="input-group">
-                                    <input type="text" id="eigenkapital_two_years_anteilig" name="eigenkapital_two_years_anteilig" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold">%</span>
-                                </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-8">Eigen&shy;kapital&shy;anteil am Kaufpreis:</div>
+                                <div class="col-4 fw-bold text-end"><span id="eigenkapital_second_comparison_anteilig"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
-                                <span id="eigenkapital_two_years_anteilig_helpline" class="form-text">Anteil des Eigenkapitals am Kaufpreis</span>
+                            <div class="row py-0 result-description">
+                                <span id="eigenkapital_second_comparison_anteilig_helpline" class="form-text">Anteil des Eigenkapitals am Kaufpreis</span>
                             </div>
-                            <div class="row py-1 align-items-center">
-                                <label for="rueckzahlungsdauer_two_years" class="col-form-label">Rück&shy;zahlungs&shy;dauer des Kredits:</label>
-                                <div class="input-group">
-                                    <input type="text" id="rueckzahlungsdauer_two_years" name="rueckzahlungsdauer_two_years" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold"></span>
-                                </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-8">Rück&shy;zahlungs&shy;dauer des Kredits:</div>
+                                <div class="col-4 fw-bold text-end"><span id="rueckzahlungsdauer_second_comparison"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
-                                <span id="rueckzahlungsdauer_two_years_helpline" class="form-text">Dauer in Jahren, bis der Kredit zurückgezahlt wäre</span>
+                            <div class="row py-0 result-description">
+                                <span id="rueckzahlungsdauer_second_comparison_helpline" class="form-text">Dauer in Jahren, bis der Kredit zurückgezahlt wäre</span>
                             </div>
-                            <div class="row py-1 align-items-center">
-                                <label for="zinssatz_two_years" class="col-form-label">Zinssatz:</label>
-                                <div class="input-group">
-                                    <input type="text" id="zinssatz_two_years" name="zinssatz_two_years" class="form-control rightnumber" readonly>
-                                    <span class="input-group-text fw-bold">%</span>
-                                </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-8">Zinssatz im <span id="zinssatz_second_comparison_date" class="text-decoration-underline"></span>:</div>
+                                <div class="col-4 fw-bold text-end"><span id="zinssatz_second_comparison"></span></div>
                             </div>
-                            <div class="row py-1 align-items-center result-description">
-                                <span id="zinssatz_two_years_helpline" class="form-text">Zinssatz vor zwei Jahren für eine anfängliche Zinsbindung von 5 bis 10 Jahren</span>
+                            <div class="row py-0 result-description">
+                                <span id="zinssatz_second_comparison_helpline" class="form-text">Zinssatz für eine anfängliche Zinsbindung von 5 bis 10 Jahren</span>
                             </div>
                         </div>
                     </div>
