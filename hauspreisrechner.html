@@ -64,7 +64,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
-                        <input type="number" id="zinssatz" name="zinssatz" value="3.5" class="form-control rightnumber" step="0.1" min="0">
+                        <input type="number" id="zinssatz" name="zinssatz" value="3.5" class="form-control rightnumber" step="0.05" min="0">
                         <span class="input-group-text fw-bold">%</span>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
-                        <input type="number" id="tilgungssatz" name="tilgungssatz" value="2.0" class="form-control rightnumber" step="0.1" min="0">
+                        <input type="number" id="tilgungssatz" name="tilgungssatz" value="2.0" class="form-control rightnumber" step="0.05" min="0">
                         <span class="input-group-text fw-bold">%</span>
                     </div>
                 </div>
@@ -158,7 +158,7 @@
     </div>
     <div class="container-fluid my-2 multiple-result" id="result-container">
         <div class="container bg-light py-2">
-            <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="row row-cols-1 row-cols-lg-3 g-4">
                 <div class="col">
                     <div class="card">
                         <div class="card-header">
@@ -166,36 +166,36 @@
                         </div>
                         <div class="card-body">
                             <div class="row py-0">
-                                <div class="col-8">Kaufpreis:</div>
-                                <div class="col-4 fw-bold text-end"><span id="kaufpreis"></span></div>
+                                <div class="col-7">Kaufpreis:</div>
+                                <div class="col-5 fw-bold text-end"><span id="kaufpreis"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="kaufpreis_helpline" class="form-text">maximaler Kaufpreis in Euro</span>
                             </div>
                             <div class="row pt-2 pb-0">
-                                <div class="col-8">Gesamtkosten:</div>
-                                <div class="col-4 fw-bold text-end"><span id="gesamtkosten"></span></div>
+                                <div class="col-7">Gesamtkosten:</div>
+                                <div class="col-5 fw-bold text-end"><span id="gesamtkosten"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="gesamtkosten_helpline" class="form-text">Gesamtkosten in Euro</span>
                             </div>
                             <div class="row pt-2 pb-0">
-                                <div class="col-8">Kredithöhe:</div>
-                                <div class="col-4 fw-bold text-end"><span id="kredithoehe"></span></div>
+                                <div class="col-7">Kredithöhe:</div>
+                                <div class="col-5 fw-bold text-end"><span id="kredithoehe"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="kredithoehe_helpline" class="form-text">Kredithöhe in Euro</span>
                             </div>
                             <div class="row pt-2 pb-0">
-                                <div class="col-8">Eigen&shy;kapital&shy;anteil am Kaufpreis:</div>
-                                <div class="col-4 fw-bold text-end"><span id="eigenkapital_anteilig"></span></div>
+                                <div class="col-7">Eigen&shy;kapital&shy;anteil am Kaufpreis:</div>
+                                <div class="col-5 fw-bold text-end"><span id="eigenkapital_anteilig"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="eigenkapital_anteilig_helpline" class="form-text">Anteil des Eigenkapitals am Kaufpreis</span>
                             </div>
                             <div class="row pt-2 pb-0">
-                                <div class="col-8">Rück&shy;zahlungs&shy;dauer des Kredits:</div>
-                                <div class="col-4 fw-bold text-end"><span id="rueckzahlungsdauer"></span></div>
+                                <div class="col-7">Rück&shy;zahlungs&shy;dauer des Kredits:</div>
+                                <div class="col-5 fw-bold text-end"><span id="rueckzahlungsdauer"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="rueckzahlungsdauer_helpline" class="form-text">Dauer in Jahren, bis der Kredit zurückgezahlt wäre</span>
@@ -210,43 +210,43 @@
                         </div>
                         <div class="card-body">
                             <div class="row py-0">
-                                <div class="col-8">Kaufpreis:</div>
-                                <div class="col-4 fw-bold text-end"><span id="kaufpreis_first_comparison"></span></div>
+                                <div class="col-7">Kaufpreis:</div>
+                                <div class="col-5 fw-bold text-end"><span id="kaufpreis_first_comparison"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="kaufpreis_first_comparison_helpline" class="form-text">maximaler Kaufpreis in Euro</span>
                             </div>
                             <div class="row pt-2 pb-0">
-                                <div class="col-8">Gesamtkosten:</div>
-                                <div class="col-4 fw-bold text-end"><span id="gesamtkosten_first_comparison"></span></div>
+                                <div class="col-7">Gesamtkosten:</div>
+                                <div class="col-5 fw-bold text-end"><span id="gesamtkosten_first_comparison"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="gesamtkosten_first_comparison_helpline" class="form-text">Gesamtkosten in Euro</span>
                             </div>
                             <div class="row pt-2 pb-0">
-                                <div class="col-8">Kredithöhe:</div>
-                                <div class="col-4 fw-bold text-end"><span id="kredithoehe_first_comparison"></span></div>
+                                <div class="col-7">Kredithöhe:</div>
+                                <div class="col-5 fw-bold text-end"><span id="kredithoehe_first_comparison"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="kredithoehe_first_comparison_helpline" class="form-text">Kredithöhe in Euro</span>
                             </div>
                             <div class="row pt-2 pb-0">
-                                <div class="col-8">Eigen&shy;kapital&shy;anteil am Kaufpreis:</div>
-                                <div class="col-4 fw-bold text-end"><span id="eigenkapital_first_comparison_anteilig"></span></div>
+                                <div class="col-7">Eigen&shy;kapital&shy;anteil am Kaufpreis:</div>
+                                <div class="col-5 fw-bold text-end"><span id="eigenkapital_first_comparison_anteilig"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="eigenkapital_first_comparison_anteilig_helpline" class="form-text">Anteil des Eigenkapitals am Kaufpreis</span>
                             </div>
                             <div class="row pt-2 pb-0">
-                                <div class="col-8">Rück&shy;zahlungs&shy;dauer des Kredits:</div>
-                                <div class="col-4 fw-bold text-end"><span id="rueckzahlungsdauer_first_comparison"></span></div>
+                                <div class="col-7">Rück&shy;zahlungs&shy;dauer des Kredits:</div>
+                                <div class="col-5 fw-bold text-end"><span id="rueckzahlungsdauer_first_comparison"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="rueckzahlungsdauer_first_comparison_helpline" class="form-text">Dauer in Jahren, bis der Kredit zurückgezahlt wäre</span>
                             </div>
                             <div class="row pt-2 pb-0">
-                                <div class="col-8">Zinssatz im <span id="zinssatz_first_comparison_date" class="text-decoration-underline"></span>:</div>
-                                <div class="col-4 fw-bold text-end"><span id="zinssatz_first_comparison"></span></div>
+                                <div class="col-7">Zinssatz im <span id="zinssatz_first_comparison_date" class="text-decoration-underline"></span>:</div>
+                                <div class="col-5 fw-bold text-end"><span id="zinssatz_first_comparison"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="zinssatz_first_comparison_helpline" class="form-text">Zinssatz für eine anfängliche Zinsbindung von 5 bis 10 Jahren</span>
@@ -261,43 +261,43 @@
                         </div>
                         <div class="card-body">
                             <div class="row py-0">
-                                <div class="col-8">Kaufpreis:</div>
-                                <div class="col-4 fw-bold text-end"><span id="kaufpreis_second_comparison"></span></div>
+                                <div class="col-7">Kaufpreis:</div>
+                                <div class="col-5 fw-bold text-end"><span id="kaufpreis_second_comparison"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="kaufpreis_second_comparison_helpline" class="form-text">maximaler Kaufpreis in Euro</span>
                             </div>
                             <div class="row pt-2 pb-0">
-                                <div class="col-8">Gesamtkosten:</div>
-                                <div class="col-4 fw-bold text-end"><span id="gesamtkosten_second_comparison"></span></div>
+                                <div class="col-7">Gesamtkosten:</div>
+                                <div class="col-5 fw-bold text-end"><span id="gesamtkosten_second_comparison"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="gesamtkosten_second_comparison_helpline" class="form-text">Gesamtkosten in Euro</span>
                             </div>
                             <div class="row pt-2 pb-0">
-                                <div class="col-8">Kredithöhe:</div>
-                                <div class="col-4 fw-bold text-end"><span id="kredithoehe_second_comparison"></span></div>
+                                <div class="col-7">Kredithöhe:</div>
+                                <div class="col-5 fw-bold text-end"><span id="kredithoehe_second_comparison"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="kredithoehe_second_comparison_helpline" class="form-text">Kredithöhe in Euro</span>
                             </div>
                             <div class="row pt-2 pb-0">
-                                <div class="col-8">Eigen&shy;kapital&shy;anteil am Kaufpreis:</div>
-                                <div class="col-4 fw-bold text-end"><span id="eigenkapital_second_comparison_anteilig"></span></div>
+                                <div class="col-7">Eigen&shy;kapital&shy;anteil am Kaufpreis:</div>
+                                <div class="col-5 fw-bold text-end"><span id="eigenkapital_second_comparison_anteilig"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="eigenkapital_second_comparison_anteilig_helpline" class="form-text">Anteil des Eigenkapitals am Kaufpreis</span>
                             </div>
                             <div class="row pt-2 pb-0">
-                                <div class="col-8">Rück&shy;zahlungs&shy;dauer des Kredits:</div>
-                                <div class="col-4 fw-bold text-end"><span id="rueckzahlungsdauer_second_comparison"></span></div>
+                                <div class="col-7">Rück&shy;zahlungs&shy;dauer des Kredits:</div>
+                                <div class="col-5 fw-bold text-end"><span id="rueckzahlungsdauer_second_comparison"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="rueckzahlungsdauer_second_comparison_helpline" class="form-text">Dauer in Jahren, bis der Kredit zurückgezahlt wäre</span>
                             </div>
                             <div class="row pt-2 pb-0">
-                                <div class="col-8">Zinssatz im <span id="zinssatz_second_comparison_date" class="text-decoration-underline"></span>:</div>
-                                <div class="col-4 fw-bold text-end"><span id="zinssatz_second_comparison"></span></div>
+                                <div class="col-7">Zinssatz im <span id="zinssatz_second_comparison_date" class="text-decoration-underline"></span>:</div>
+                                <div class="col-5 fw-bold text-end"><span id="zinssatz_second_comparison"></span></div>
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="zinssatz_second_comparison_helpline" class="form-text">Zinssatz für eine anfängliche Zinsbindung von 5 bis 10 Jahren</span>

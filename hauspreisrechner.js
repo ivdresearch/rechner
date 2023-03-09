@@ -103,12 +103,16 @@ function set_date_options() {
     const current_year = date.getFullYear();
     const preselect1 =  year_month(current_year-1, current_month);
     const preselect2 =  year_month(current_year-2, current_month);
+    // const month_names = {
+    //     1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr",
+    //     5: "Mai", 6: "Jun", 7: "Jul", 8: "Aug",
+    //     9: "Sep", 10: "Okt", 11: "Nov", 12: "Dez",
+    // }
     const month_names = {
-        1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr",
-        5: "Mai", 6: "Jun", 7: "Jul", 8: "Aug",
-        9: "Sep", 10: "Okt", 11: "Nov", 12: "Dez",
+        1: "Januar", 2: "Februar", 3: "März", 4: "April",
+        5: "Mai", 6: "Juni", 7: "Juli", 8: "August",
+        9: "September", 10: "Oktober", 11: "November", 12: "Dezember",
     }
-    // for (let jahr = 2003; jahr <= current_year; jahr++) {
     for (let jahr in bundesbank_zinsen) {
         let monat = 1;
         for (monat; monat <= bundesbank_zinsen[jahr].length; monat++) {
@@ -218,7 +222,7 @@ function set_results(results, first_comparison, second_comparison) {
         eigenkapital_anteilig_helpline.html("");
     }
     $("#eigenkapital_anteilig").text(results.eigenkapital_anteilig);
-    $("#rueckzahlungsdauer").text(results.rueckzahlungsdauer);
+    $("#rueckzahlungsdauer").text(results.rueckzahlungsdauer + " Jahre");
     if (first_comparison !== null) {
         $("#kaufpreis_first_comparison").text(first_comparison.preis);
         $("#gesamtkosten_first_comparison").text(first_comparison.gesamtkosten);
@@ -232,7 +236,7 @@ function set_results(results, first_comparison, second_comparison) {
             eigenkapital_first_comparison_anteilig_helpline.removeClass("text-danger");
             eigenkapital_first_comparison_anteilig_helpline.html("");
         }
-        $("#rueckzahlungsdauer_first_comparison").text(first_comparison.rueckzahlungsdauer);
+        $("#rueckzahlungsdauer_first_comparison").text(first_comparison.rueckzahlungsdauer + " Jahre");
         $("#zinssatz_first_comparison").text(first_comparison.zinssatz);
         let string_date1 = first_comparison["date"]["monat_name"] + " " + first_comparison["date"]["jahr"].toString();
         $("#zinssatz_first_comparison_date").text(string_date1);
@@ -261,7 +265,7 @@ function set_results(results, first_comparison, second_comparison) {
             eigenkapital_second_comparison_anteilig_helpline.removeClass("text-danger");
             eigenkapital_second_comparison_anteilig_helpline.html("");
         }
-        $("#rueckzahlungsdauer_second_comparison").text(second_comparison.rueckzahlungsdauer);
+        $("#rueckzahlungsdauer_second_comparison").text(second_comparison.rueckzahlungsdauer + " Jahre");
         $("#zinssatz_second_comparison").text(second_comparison.zinssatz);
         let string_date2 = second_comparison["date"]["monat_name"] + " " + second_comparison["date"]["jahr"].toString();
         $("#zinssatz_second_comparison_date").text(string_date2);
