@@ -34,8 +34,7 @@
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                     <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 text-black text-decoration-none">
                         <img src="https://ivd.net/wp-content/themes/ivd/Images/logo.svg" alt="IVD Logo" width="40">
-                        <span class="fs-4">&nbsp;Research</span>
-                        <span class="fs-4" id="headline">&nbsp;Hauspreisrechner&nbsp;</span>
+                        <span class="fs-4">&nbsp;Research&nbsp;Hauspreisrechner&nbsp;</span>
                     </a>
                 </div>
             </header>
@@ -44,6 +43,7 @@
 
     <div class="container-fluid my-2">
         <div class="container bg-light py-2">
+            <!--
             <div class="row py-1 align-items-center">
                 <div class="col-md-2 text-end">
                     <label for="annuitaet_pm" class="col-form-label">Maximale monatliche Kreditbelastung:</label>
@@ -56,6 +56,49 @@
                 </div>
                 <div class="col-md-7">
                     <span id="annuitaet_pm_helpline" class="form-text">Wie hoch darf die monatliche Annuität aus dem Darlehen maximal sein</span>
+                </div>
+            </div>
+            -->
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="belastung_pm" class="col-form-label">Maximale monatliche Wohnkostenbelastung:</label>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <input type="number" id="belastung_pm" name="belastung_pm" value="1800" class="form-control rightnumber" step="10" min="0">
+                        <span class="input-group-text fw-bold">€</span>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="belastung_pm_helpline" class="form-text">Wie hoch darf die monatliche maximal zumutbare Belastung für das Haus/die Wohnung sein?</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="betriebskosten_pm" class="col-form-label">Erwartete monatliche warme Betriebskosten:</label>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <input type="number" id="betriebskosten_pm" name="betriebskosten_pm" value="800" class="form-control rightnumber" step="10" min="0">
+                        <span class="input-group-text fw-bold">€</span>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="betriebskosten_pm_helpline" class="form-text">Wie hoch schätzen Sie die monatlichen warmen Betriebskosten? Wenn Sie kein konkretes Objekt im Blick haben, lassen Sie einen beliebigen Wert in diesem Feld stehen.</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-2 text-end">
+                    <label for="annuitaet_pm" class="col-form-label">monatliche Kreditbelastung:</label>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <input type="number" id="annuitaet_pm" name="annuitaet_pm" value="" class="form-control rightnumber" readonly disabled>
+                        <span class="input-group-text fw-bold">€</span>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <span id="annuitaet_pm_helpline" class="form-text">Maximale Höhe der monatlichen Annuität</span>
                 </div>
             </div>
             <div class="row py-1 align-items-center">
@@ -78,7 +121,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
-                        <input type="number" id="tilgungssatz" name="tilgungssatz" value="2.0" class="form-control rightnumber" step="0.05" min="0">
+                        <input type="number" id="tilgungssatz" name="tilgungssatz" value="2" class="form-control rightnumber" step="0.05" min="0">
                         <span class="input-group-text fw-bold">%</span>
                     </div>
                 </div>
@@ -143,6 +186,7 @@
                 </div>
                 <div class="col-md-10">
                     <p class="fw-light fs-6">Die Ergebnisse sollen keine ausführliche Finanzierungsberatung ersetzen. Sie sollen eine Orientierung bieten.</p>
+                    <p class="fw-light fs-6">Quelle der Referenzzinssätze: Bundesbank (Zinsreihe SUD118, Effektivzinssätze Banken DE / Neugeschäft / Wohnungsbaukredite an private Haushalte, anfängliche Zinsbindung über 5 bis 10 Jahre).</p>
                 </div>
             </div>
             <div class="row py-1 align-items-center">
@@ -177,7 +221,15 @@
                                 <div class="col-5 fw-bold text-end"><span id="gesamtkosten"></span></div>
                             </div>
                             <div class="row py-0 result-description">
-                                <span id="gesamtkosten_helpline" class="form-text">Gesamtkosten in Euro</span>
+                                <span id="gesamtkosten_helpline" class="form-text">Gesamtkosten in Euro, Kaufpreis inkl. Erwerbsnebenkosten</span>
+                            </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-7">Eigen&shy;kapital&shy;anteil am Kaufpreis:</div>
+                                <div class="col-5 fw-bold text-end"><span id="eigenkapital_anteilig"></span></div>
+                            </div>
+                            <div class="row py-0 result-description">
+                                <span class="form-text">Anteil des Eigenkapitals am Kaufpreis</span>
+                                <span id="eigenkapital_anteilig_warning" class="form-text text-danger">Achtung: Das Eigenkapital würde bei dieser Kalkulation nicht ausreichen um die Kaufnebenkosten zu decken.</span>
                             </div>
                             <div class="row pt-2 pb-0">
                                 <div class="col-7">Kredithöhe:</div>
@@ -185,13 +237,6 @@
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="kredithoehe_helpline" class="form-text">Kredithöhe in Euro</span>
-                            </div>
-                            <div class="row pt-2 pb-0">
-                                <div class="col-7">Eigen&shy;kapital&shy;anteil am Kaufpreis:</div>
-                                <div class="col-5 fw-bold text-end"><span id="eigenkapital_anteilig"></span></div>
-                            </div>
-                            <div class="row py-0 result-description">
-                                <span id="eigenkapital_anteilig_helpline" class="form-text">Anteil des Eigenkapitals am Kaufpreis</span>
                             </div>
                             <div class="row pt-2 pb-0">
                                 <div class="col-7">Rück&shy;zahlungs&shy;dauer des Kredits:</div>
@@ -221,7 +266,15 @@
                                 <div class="col-5 fw-bold text-end"><span id="gesamtkosten_first_comparison"></span></div>
                             </div>
                             <div class="row py-0 result-description">
-                                <span id="gesamtkosten_first_comparison_helpline" class="form-text">Gesamtkosten in Euro</span>
+                                <span id="gesamtkosten_first_comparison_helpline" class="form-text">Gesamtkosten in Euro, Kaufpreis inkl. Erwerbsnebenkosten</span>
+                            </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-7">Eigen&shy;kapital&shy;anteil am Kaufpreis:</div>
+                                <div class="col-5 fw-bold text-end"><span id="eigenkapital_first_comparison_anteilig"></span></div>
+                            </div>
+                            <div class="row py-0 result-description">
+                                <span class="form-text">Anteil des Eigenkapitals am Kaufpreis</span>
+                                <span id="eigenkapital_first_comparison_anteilig_warning" class="form-text text-danger">Das Eigenkapital hätte bei dieser Kalkulation nicht ausgereicht um die Kaufnebenkosten zu decken.</span>
                             </div>
                             <div class="row pt-2 pb-0">
                                 <div class="col-7">Kredithöhe:</div>
@@ -229,13 +282,6 @@
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="kredithoehe_first_comparison_helpline" class="form-text">Kredithöhe in Euro</span>
-                            </div>
-                            <div class="row pt-2 pb-0">
-                                <div class="col-7">Eigen&shy;kapital&shy;anteil am Kaufpreis:</div>
-                                <div class="col-5 fw-bold text-end"><span id="eigenkapital_first_comparison_anteilig"></span></div>
-                            </div>
-                            <div class="row py-0 result-description">
-                                <span id="eigenkapital_first_comparison_anteilig_helpline" class="form-text">Anteil des Eigenkapitals am Kaufpreis</span>
                             </div>
                             <div class="row pt-2 pb-0">
                                 <div class="col-7">Rück&shy;zahlungs&shy;dauer des Kredits:</div>
@@ -272,7 +318,15 @@
                                 <div class="col-5 fw-bold text-end"><span id="gesamtkosten_second_comparison"></span></div>
                             </div>
                             <div class="row py-0 result-description">
-                                <span id="gesamtkosten_second_comparison_helpline" class="form-text">Gesamtkosten in Euro</span>
+                                <span id="gesamtkosten_second_comparison_helpline" class="form-text">Gesamtkosten in Euro, Kaufpreis inkl. Erwerbsnebenkosten</span>
+                            </div>
+                            <div class="row pt-2 pb-0">
+                                <div class="col-7">Eigen&shy;kapital&shy;anteil am Kaufpreis:</div>
+                                <div class="col-5 fw-bold text-end"><span id="eigenkapital_second_comparison_anteilig"></span></div>
+                            </div>
+                            <div class="row py-0 result-description">
+                                <span class="form-text">Anteil des Eigenkapitals am Kaufpreis</span>
+                                <span id="eigenkapital_second_comparison_anteilig_warning" class="form-text text-danger">Das Eigenkapital hätte bei dieser Kalkulation nicht ausgereicht um die Kaufnebenkosten zu decken.</span>
                             </div>
                             <div class="row pt-2 pb-0">
                                 <div class="col-7">Kredithöhe:</div>
@@ -280,13 +334,6 @@
                             </div>
                             <div class="row py-0 result-description">
                                 <span id="kredithoehe_second_comparison_helpline" class="form-text">Kredithöhe in Euro</span>
-                            </div>
-                            <div class="row pt-2 pb-0">
-                                <div class="col-7">Eigen&shy;kapital&shy;anteil am Kaufpreis:</div>
-                                <div class="col-5 fw-bold text-end"><span id="eigenkapital_second_comparison_anteilig"></span></div>
-                            </div>
-                            <div class="row py-0 result-description">
-                                <span id="eigenkapital_second_comparison_anteilig_helpline" class="form-text">Anteil des Eigenkapitals am Kaufpreis</span>
                             </div>
                             <div class="row pt-2 pb-0">
                                 <div class="col-7">Rück&shy;zahlungs&shy;dauer des Kredits:</div>

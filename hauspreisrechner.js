@@ -1,6 +1,8 @@
 let result_container = $("#result-container");
 
 let nebenkosten_input = $("#nebenkosten");
+let belastung_pm_input = $("#belastung_pm");
+let betriebskosten_pm_input = $("#betriebskosten_pm");
 let annuitaet_pm_input = $("#annuitaet_pm");
 let zinssatz_input = $("#zinssatz");
 let tilgungssatz_input = $("#tilgungssatz");
@@ -16,25 +18,40 @@ let bundesbank_zinsen = {};
 window.onload = function() {
     bundesbank_request();
     set_date_options();
+    set_annuitaet();
     zinssatz_input.val(latest_bundesbank_value);
 };
+
+belastung_pm_input.change(function () {
+    set_annuitaet();
+})
+
+betriebskosten_pm_input.change(function () {
+    set_annuitaet();
+})
+
+function set_annuitaet() {
+    let betriebskosten = betriebskosten_pm_input.val();
+    let belastung = belastung_pm_input.val();
+    annuitaet_pm_input.val(belastung - betriebskosten);
+}
 
 $("#calculate").click(function() {
     let valid = validate_inputs();
     if (valid === false) {return;}
     let input_data = get_input_dict();
-    let calculator_results = calculator(input_data);
+    let calculator_results = calculator(input_data, true);
     if (Object.keys(bundesbank_zinsen).length > 0) {
         vergleich_dates = get_dates();
         
         let date1 = split_year_month(vergleich_dates[0]);
         input_data.zinssatz_prozent = bundesbank_zinsen[date1[0]][date1[1]-1] / 100;
-        let results_first_comparison = calculator(input_data);
+        let results_first_comparison = calculator(input_data, false);
         results_first_comparison["date"] = monat_jahr_dict[vergleich_dates[0]];
         
         let date2 = split_year_month(vergleich_dates[1]);
         input_data.zinssatz_prozent = bundesbank_zinsen[date2[0]][date2[1]-1] / 100;
-        let results_second_comparison = calculator(input_data);
+        let results_second_comparison = calculator(input_data, false);
         results_second_comparison["date"] = monat_jahr_dict[vergleich_dates[1]];
         
         set_results(calculator_results, results_first_comparison, results_second_comparison);
@@ -103,11 +120,6 @@ function set_date_options() {
     const current_year = date.getFullYear();
     const preselect1 =  year_month(current_year-1, current_month);
     const preselect2 =  year_month(current_year-2, current_month);
-    // const month_names = {
-    //     1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr",
-    //     5: "Mai", 6: "Jun", 7: "Jul", 8: "Aug",
-    //     9: "Sep", 10: "Okt", 11: "Nov", 12: "Dez",
-    // }
     const month_names = {
         1: "Januar", 2: "Februar", 3: "März", 4: "April",
         5: "Mai", 6: "Juni", 7: "Juli", 8: "August",
@@ -140,14 +152,16 @@ function append_date_option(object, value, name, current) {
 function get_dates() {
     let d1 = zinsvergleich1.val();
     let d2 = zinsvergleich2.val();
-    // if (d1.localeCompare(d2) >= 0) {
-    //     return [d2, d1];
-    // } else {
-    //     return [d1, d2];
-    // }
     return [d1, d2];
 }
 
+/**
+ * Kalkurliert Rückzahlungsdauer eine Annuitätendarlehens auf monatlicher Basis
+ * @param kredit in 0_000.00
+ * @param annuitaet in 0_000.00
+ * @param zinssatz in 0.00
+ * @returns {number} in 0.00
+ */
 function calculate_rueckzahlungsdauer(kredit, annuitaet, zinssatz) {
     // Annuität pro Monat
     zinssatz = zinssatz / 12;
@@ -174,23 +188,35 @@ function get_input_dict() {
     let zinssatz_prozent = parseFloat(zinssatz_input.val()) / 100;
     let tilgungssatz_prozent = parseFloat(tilgungssatz_input.val()) / 100;
     let eigenkapital = parseInt(eigenkapital_input.val());
+    let betriebskosten_pm = parseInt(betriebskosten_pm_input.val());
 
     return {
         "nebenkosten_prozent": nebenkosten_prozent,
         "kreditbelastung_pm": kreditbelastung_pm,
         "zinssatz_prozent": zinssatz_prozent,
         "tilgungssatz_prozent": tilgungssatz_prozent,
-        "eigenkapital": eigenkapital
+        "eigenkapital": eigenkapital,
+        "betriebskosten": betriebskosten_pm,
     };
 }
 
-function calculator(inputs) {
+/**
+ * Kalkuliert Ergebnisse
+ * @param inputs object
+ * @param calculate_betriebskosten bool
+ * @returns {{preis: string, rueckzahlungsdauer: string, zinssatz: string, eigenkapital_anteilig: string, gesamtkosten: string, betriebskosten, eigenkapital_anteilig_warning: boolean, fremdkapital: string}}
+ */
+function calculator(inputs, calculate_betriebskosten) {
     let fremdkapital = (inputs.kreditbelastung_pm * 12) / (inputs.zinssatz_prozent + inputs.tilgungssatz_prozent);
     let gesamtkosten = fremdkapital + inputs.eigenkapital;
     let preis = gesamtkosten / (1 + inputs.nebenkosten_prozent);
     let rueckzahlungsdauer = calculate_rueckzahlungsdauer(fremdkapital, inputs.kreditbelastung_pm, inputs.zinssatz_prozent);
     let eigenkapital_anteilig = 1 - (fremdkapital / preis);
     let eigenkapital_anteilig_warning = false;
+    let betriebskosten;
+    if (calculate_betriebskosten) {
+        betriebskosten = (inputs.betriebskosten + inputs.kreditbelastung_pm).toLocaleString("de-DE", { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+    }
 
     if (eigenkapital_anteilig < 0) {
         eigenkapital_anteilig = 0;
@@ -205,6 +231,7 @@ function calculator(inputs) {
         "eigenkapital_anteilig_warning": eigenkapital_anteilig_warning,
         "eigenkapital_anteilig": eigenkapital_anteilig.toLocaleString("de-DE", { style: 'percent', maximumFractionDigits: 1 }),
         "zinssatz": inputs.zinssatz_prozent.toLocaleString("de-DE", { style: 'percent', maximumFractionDigits: 2 }),
+        "betriebskosten": betriebskosten,
     };
 }
 
@@ -213,28 +240,23 @@ function set_results(results, first_comparison, second_comparison) {
     $("#kaufpreis").text(results.preis);
     $("#gesamtkosten").text(results.gesamtkosten);
     $("#kredithoehe").text(results.fremdkapital);
-    let eigenkapital_anteilig_helpline = $("#eigenkapital_anteilig_helpline");
-    if (results.eigenkapital_anteilig_warning) {
-        eigenkapital_anteilig_helpline.addClass("text-danger");
-        eigenkapital_anteilig_helpline.html("Anteil des Eigenkapitals am Kaufpreis<br>Achtung: Das Eigenkapital würde bei dieser Kalkulation nicht ausreichen um die Kaufnebenkosten zu decken.");
-    } else {
-        eigenkapital_anteilig_helpline.removeClass("text-danger");
-        eigenkapital_anteilig_helpline.html("");
-    }
+    $("#belastung").text(results.betriebskosten);
     $("#eigenkapital_anteilig").text(results.eigenkapital_anteilig);
+    if (results.eigenkapital_anteilig_warning) {
+        $("#eigenkapital_anteilig_warning").show();
+    } else {
+        $("#eigenkapital_anteilig_warning").hide();
+    }
     $("#rueckzahlungsdauer").text(results.rueckzahlungsdauer + " Jahre");
     if (first_comparison !== null) {
         $("#kaufpreis_first_comparison").text(first_comparison.preis);
         $("#gesamtkosten_first_comparison").text(first_comparison.gesamtkosten);
         $("#kredithoehe_first_comparison").text(first_comparison.fremdkapital);
         $("#eigenkapital_first_comparison_anteilig").text(first_comparison.eigenkapital_anteilig);
-        let eigenkapital_first_comparison_anteilig_helpline = $("#eigenkapital_first_comparison_anteilig_helpline");
         if (first_comparison.eigenkapital_anteilig_warning) {
-            eigenkapital_first_comparison_anteilig_helpline.addClass("text-danger");
-            eigenkapital_first_comparison_anteilig_helpline.html("Anteil des Eigenkapitals am Kaufpreis<br>Das Eigenkapital hätte bei dieser Kalkulation nicht ausgereicht um die Kaufnebenkosten zu decken.");
+            $("#eigenkapital_first_comparison_anteilig_warning").show();
         } else {
-            eigenkapital_first_comparison_anteilig_helpline.removeClass("text-danger");
-            eigenkapital_first_comparison_anteilig_helpline.html("");
+            $("#eigenkapital_first_comparison_anteilig_warning").hide();
         }
         $("#rueckzahlungsdauer_first_comparison").text(first_comparison.rueckzahlungsdauer + " Jahre");
         $("#zinssatz_first_comparison").text(first_comparison.zinssatz);
@@ -257,13 +279,10 @@ function set_results(results, first_comparison, second_comparison) {
         $("#gesamtkosten_second_comparison").text(second_comparison.gesamtkosten);
         $("#kredithoehe_second_comparison").text(second_comparison.fremdkapital);
         $("#eigenkapital_second_comparison_anteilig").text(second_comparison.eigenkapital_anteilig);
-        let eigenkapital_second_comparison_anteilig_helpline = $("#eigenkapital_second_comparison_anteilig_helpline");
         if (second_comparison.eigenkapital_anteilig_warning) {
-            eigenkapital_second_comparison_anteilig_helpline.addClass("text-danger");
-            eigenkapital_second_comparison_anteilig_helpline.html("Anteil des Eigenkapitals am Kaufpreis<br>Das Eigenkapital hätte bei dieser Kalkulation nicht ausgereicht um die Kaufnebenkosten zu decken.");
+            $("#eigenkapital_second_comparison_anteilig_warning").show();
         } else {
-            eigenkapital_second_comparison_anteilig_helpline.removeClass("text-danger");
-            eigenkapital_second_comparison_anteilig_helpline.html("");
+            $("#eigenkapital_second_comparison_anteilig_warning").hide();
         }
         $("#rueckzahlungsdauer_second_comparison").text(second_comparison.rueckzahlungsdauer + " Jahre");
         $("#zinssatz_second_comparison").text(second_comparison.zinssatz);
