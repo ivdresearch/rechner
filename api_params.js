@@ -20,4 +20,8 @@ $( document ).ready(function() {
     if (page_impressum === "false") {
         $("#impressum").remove();
     }
+    let page_footer = urlParams.get("footer");
+    if (page_footer === "false") {
+        $("#footer").remove();
+    }
 });
