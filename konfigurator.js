@@ -1,6 +1,7 @@
 $(document).ready(function () {
     const titel_input = $("#titel");
     const bgcolor_input = $("#bgcolor");
+    const logo_url_input = $("#logo_url");
     const erstellen_button = $("#erstellen");
 
     const result_container = $("#result_container");
@@ -27,6 +28,8 @@ $(document).ready(function () {
         }
         let bgcolor = bgcolor_input.val();
         params.push("bgcolor=" + encodeURIComponent(bgcolor));
+        let logo_url = logo_url_input.val();
+        params.push("logo_url=" + encodeURIComponent(logo_url));
         url = url.concat(params.join("&"));
         let iframe = '<iframe src="' + url + '" style="width:100%; height:800px"></iframe>'
         result_url.val(url);
