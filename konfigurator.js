@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    $("#jahr").text(new Date().getFullYear());
+    
     const titel_input = $("#titel");
     const bgcolor_input = $("#bgcolor");
     const logo_url_input = $("#logo_url");
