@@ -71,11 +71,12 @@ function bundesbank_request() {
     $.ajax({
         type: "GET",
         async: false,
-        url: "https://api.statistiken.bundesbank.de/rest/data/BBK01/SUD118?detail=dataonly", // ?startPeriod=" + vergleich_dates[0] + "&endPeriod=" + vergleich_dates[1] + "&detail=dataonly",
+        url: "https://api.statistiken.bundesbank.de/rest/data/BBIM1/M.DE.B.A2C.O.R.A.2250.EUR.N?detail=dataonly", // ?startPeriod=" + vergleich_dates[0] + "&endPeriod=" + vergleich_dates[1] + "&detail=dataonly",
         contentType: 'application/json',
         dataType: "json",
         success: function (result, status, xhr) {
-            const result_array = xhr["responseJSON"]["data"]["dataSets"]["0"]["series"]["0"]["observations"];
+            const result_prearray = xhr["responseJSON"]["data"]["dataSets"]["0"]["series"];
+            const result_array = result_prearray[Object.keys(result_prearray)[0]]["observations"]; // unnötiger Umweg, weil key in diesem Schritt kryptisch (eventuell fehlerhaft)
             const results = xhr["responseJSON"]["data"]["structure"]["dimensions"]["observation"][0]["values"]
             let position = 0;
             for (let key in result_array) {
