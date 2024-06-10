@@ -10,18 +10,19 @@ $("#calculate").click(function() {
 });
 
 $("#auswahl_berechnung_belastung").click(function() {
+    result_fields.empty();
     $("#result-container").css("display", "none");
     // $("#headline").html("&nbsp;Leistbarkeitsrechner&nbsp;");
-    $(".container-belastung").css({"display": ""});
-    $(".container-leistbarkeit").css({"display": "none"});
+    $(".container-belastung").css("display", "flex");
+    $(".container-leistbarkeit").css("display", "none");
     reset_eigenkapital_prozent();
 });
 
 $("#auswahl_berechnung_leistbarkeit").click(function() {
     $("#result-container").css("display", "none");
     // $("#headline").html("&nbsp;Leistbarkeitsrechner&nbsp;");
-    $(".container-belastung").css({"display": "none"});
-    $(".container-leistbarkeit").css({"display": "flex"});
+    $(".container-belastung").css("display", "none");
+    $(".container-leistbarkeit").css("display", "flex");
     let eigenkapital = $("#eigenkapital");
     eigenkapital.attr("step", "1000");
     eigenkapital.val("100000");
@@ -122,6 +123,12 @@ function calculator_belastung() {
     create_result_kreditbelastung_anteil(kreditbelastung_anteilig);
     // $("#rueckzahlungsdauer").val(rueckzahlungsdauer.toFixed(1).toLocaleString().replace(".", ","));
     create_result_rueckzahlungsdauer(rueckzahlungsdauer);
+
+    const restschuld_jahre = [5, 10, 15, 20, 25];
+    for (let jahr of restschuld_jahre) {
+        let rs = restschuld(fremdkapital, tilgungssatz, zinssatz, jahr);
+        create_result_restschuld(rs, jahr);
+    }
 
     let eigenkapitel_helpline = $("#e_eigenkapital_benoetigt_helpline");
     if (eigenkapital < nebenkosten_summe) {
