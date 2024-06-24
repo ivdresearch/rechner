@@ -12,7 +12,6 @@ $("#calculate").click(function() {
 $("#auswahl_berechnung_belastung").click(function() {
     result_fields.empty();
     $("#result-container").css("display", "none");
-    // $("#headline").html("&nbsp;Leistbarkeitsrechner&nbsp;");
     $(".container-belastung").css("display", "flex");
     $(".container-leistbarkeit").css("display", "none");
     reset_eigenkapital_prozent();
@@ -20,7 +19,6 @@ $("#auswahl_berechnung_belastung").click(function() {
 
 $("#auswahl_berechnung_leistbarkeit").click(function() {
     $("#result-container").css("display", "none");
-    // $("#headline").html("&nbsp;Leistbarkeitsrechner&nbsp;");
     $(".container-belastung").css("display", "none");
     $(".container-leistbarkeit").css("display", "flex");
     let eigenkapital = $("#eigenkapital");
@@ -109,22 +107,14 @@ function calculator_belastung() {
         beleihungsauslauf = 0;
     }
 
-    // $("#gesamtkosten").val(gesamtkosten.toFixed().toLocaleString());
     create_result_gesamtkosten(gesamtkosten);
-    // $("#e_eigenkapital_benoetigt").val(eigenkapital.toFixed().toLocaleString());
     create_result_eigenkapital(eigenkapital);
-    // $("#kredithoehe").val(fremdkapital.toFixed().toLocaleString());
-    // $("#kredithoehe_helpline").html("Kredithöhe in Euro<br>Dies entspricht einem Fremdkapitalanteil von <strong>" + beleihungsauslauf.toFixed().toLocaleString() + "</strong> Prozent am Kaufpreis.");
     create_result_kredithoehe(fremdkapital, "Kredithöhe in Euro<br>Dies entspricht einem Fremdkapitalanteil von <strong>" + beleihungsauslauf.toFixed().toLocaleString() + "</strong> Prozent am Kaufpreis.");
-    // $("#kreditbelastung").val(kreditbelastung_pm.toFixed().toLocaleString());
     create_result_kreditbelastung(kreditbelastung_pm);
-    // $("#kreditbelastung-anteil").val(einkommenbelastung_final.toFixed(1).toLocaleString().replace(".", ","));
-    // $("#kreditbelastung-anteil").val(kreditbelastung_anteilig.toFixed(1).toLocaleString().replace(".", ","));
     create_result_kreditbelastung_anteil(kreditbelastung_anteilig);
-    // $("#rueckzahlungsdauer").val(rueckzahlungsdauer.toFixed(1).toLocaleString().replace(".", ","));
     create_result_rueckzahlungsdauer(rueckzahlungsdauer);
 
-    const restschuld_jahre = [5, 10, 15, 20, 25];
+    const restschuld_jahre = [5, 10, 15];
     for (let jahr of restschuld_jahre) {
         let rs = restschuld(fremdkapital, tilgungssatz, zinssatz, jahr);
         create_result_restschuld(rs, jahr);
@@ -174,29 +164,15 @@ function calculator_leistbarkeit() {
     let einkommenbelastung_final = (annuitaet_pa / einkommen) * 100;
     let rueckzahlungsdauer = calculate_rueckzahlungsdauer(fremdkapital, annuitaet_pm, zinssatz);
 
-    // $("#l_kaufpreis").val(kaufpreis.toFixed().toLocaleString());
     create_result_kaufpreis(kaufpreis);
-
-    // $("#gesamtkosten").val(gesamtkosten.toFixed().toLocaleString());
     create_result_gesamtkosten(gesamtkosten);
-
-    // $("#kredithoehe").val(fremdkapital.toFixed().toLocaleString());
-    // $("#kredithoehe_helpline").html("Kredithöhe in Euro");
     create_result_kredithoehe(fremdkapital, "Kredithöhe in Euro");
-
-    // $("#l_eigenkapitalanteil_final").val(eigenkapital_anteil_final.toFixed(1).toLocaleString().replace(".", ","));
     create_result_eigenkapitalanteil(eigenkapital_anteil_final);
-
-    // $("#kreditbelastung").val(annuitaet_pm.toFixed().toLocaleString());
     create_result_kreditbelastung(annuitaet_pm);
-
-    // $("#kreditbelastung-anteil").val(einkommenbelastung_final.toFixed(1).toLocaleString().replace(".", ","));
     create_result_kreditbelastung_anteil(einkommenbelastung_final);
-
-    // $("#rueckzahlungsdauer").val(rueckzahlungsdauer.toFixed(1).toLocaleString().replace(".", ","));
     create_result_rueckzahlungsdauer(rueckzahlungsdauer);
 
-    const restschuld_jahre = [5, 10, 15, 20, 25];
+    const restschuld_jahre = [5, 10, 15];
     for (let jahr of restschuld_jahre) {
         let rs = restschuld(fremdkapital, tilgungssatz, zinssatz, jahr);
         create_result_restschuld(rs, jahr);
@@ -284,8 +260,7 @@ function create_result(id_name, label, helptext, wert="", suffix="") {
                     <span class="input-group-text fw-bold">${suffix}</span>
                 </div>
             </div>
-            <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
-            <div class="col-md-9 col-lg-7">
+            <div class="col-md-9 offset-md-3 col-lg-7 offset-lg-0">
                 <span id="${id_name}_helpline" class="form-text">${helptext}</span>
             </div>
         </div>`

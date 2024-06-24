@@ -31,7 +31,7 @@ def bs4_classes(content):
 
 
 if __name__ == "__main__":
-    file = "rechner.html"
+    file = "rechner_alt.html"
     with open(file, "r") as f:
         html = f.read()
 

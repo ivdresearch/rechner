@@ -17,52 +17,9 @@
     <meta name="msapplication-config" content="icons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" onerror="this.onerror=null;this.href='static/bootstrap_5-3-3/css/bootstrap.min.css';"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
 
-    <style>
-        .rightnumber {
-            text-align: right;
-        }
-
-        .input-group .input-group-text {
-            width: 40px;
-        }
-
-        .container-leistbarkeit {
-            display: none;
-        }
-
-        @media print {
-            body {
-                margin: 0;
-                padding: 0 !important;
-                min-width: 768px;
-            }
-            .container {
-                width: auto;
-                min-width: 720px;
-            }
-            .col-md-3, .col-md-9 {
-                float: left;
-            }
-            .col-md-9 {
-                width: 75%;
-            }
-            .col-md-3 {
-                width: 25%;
-            }
-            .offset-md-3 {
-                margin-left: 25%;
-            }
-        }
-
-        #result-container {
-            display: none;
-        }
-    </style>
-
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="static/jquery-3.7.1.min.js"><\/script>')</script>
+    <style>.rightnumber{text-align: right;} .input-group .input-group-text{width: 40px;} #result-container{display: none;} .container-leistbarkeit{display: none;}</style>
 </head>
 <body>
     <div class="container-fluid my-2">
@@ -78,7 +35,7 @@
         <div class="container bg-light py-2">
             <div class="row py-1 align-items-center">
                 <div class="col-md-3 col-lg-2 text-md-end">
-                    <label class="col-form-label">Was möchten Sie berechnen?</label>
+                    <label for="auswahl_berechnung" class="col-form-label">Was möchten Sie berechnen?</label>
                 </div>
                 <div class="col-md-9 col-lg-10">
                     <div class="form-check">
@@ -101,7 +58,8 @@
                         <span class="input-group-text fw-bold">€</span>
                     </div>
                 </div>
-                <div class="col-md-9 offset-md-3 col-lg-7 offset-lg-0">
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
                     <span id="e_preis_helpline" class="form-text">Kaufpreis in Euro<br>429.000&nbsp;€ entspricht einem durchschnittlichen Kaufpreis für ein bestehendes Einfamilienhaus. Bedenken Sie auch etwaige Sanierungskosten und kalkulieren diese entsprechend ein.</span>
                 </div>
             </div>
@@ -115,7 +73,8 @@
                         <span class="input-group-text fw-bold">%</span>
                     </div>
                 </div>
-                <div class="col-md-9 offset-md-3 col-lg-7 offset-lg-0">
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
                     <span id="nebenkosten_helpline" class="form-text">Kaufnebenkosten in Prozent<br>12,07&nbsp;% entsprechen zum Beispiel: 6,5&nbsp;% Grunderwerbsteuer, 3,57&nbsp;% Maklercourtage, 2&nbsp;% Notar und Grundbuchamt</span>
                 </div>
             </div>
@@ -129,7 +88,8 @@
                         <span class="input-group-text fw-bold">%</span>
                     </div>
                 </div>
-                <div class="col-md-9 offset-md-3 col-lg-7 offset-lg-0">
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
                     <span id="zinssatz_helpline" class="form-text">Zinssatz in Prozent</span>
                 </div>
             </div>
@@ -143,7 +103,8 @@
                         <span class="input-group-text fw-bold">%</span>
                     </div>
                 </div>
-                <div class="col-md-9 offset-md-3 col-lg-7 offset-lg-0">
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
                     <span id="tilgungssatz_helpline" class="form-text">Tilgungssatz in Prozent</span>
                 </div>
             </div>
@@ -157,7 +118,8 @@
                         <span class="input-group-text fw-bold">€</span>
                     </div>
                 </div>
-                <div class="col-md-9 offset-md-3 col-lg-7 offset-lg-0">
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
                     <span id="einkommen_helpline" class="form-text">Nettoeinkommen in Euro<br>gegebenenfalls inkl. Kindergeld</span>
                 </div>
             </div>
@@ -173,7 +135,8 @@
                         <label class="form-check-label" for="einkommen_zeit_jaehrlich">im Jahr</label>
                     </div>
                 </div>
-                <div class="col-md-9 offset-md-3 col-lg-7 offset-lg-0">
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
                     <span id="einkommen_zeit_helpline" class="form-text">Auf welchen Zeitraum bezieht sich obige Einkommensangabe?</span>
                 </div>
             </div>
@@ -197,7 +160,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-9 offset-md-3 col-lg-7 offset-lg-0">
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
                     <span id="eigenkapital_helpline" class="form-text">Eigenkapital in Prozent<br>Wie viel Eigenkapital anteilig am Kaufpreis kann aufgebracht werden? Beachten Sie, dass die Kaufnebenkosten ebenfalls aus Eigenkapital beglichen werden.</span>
                 </div>
             </div>
@@ -215,7 +179,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-9 offset-md-3 col-lg-7 offset-lg-0">
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
                     <span id="l_einkommenbelastung_helpline" class="form-text">anteilige Kreditbelastung am Einkommen in Prozent</span>
                 </div>
             </div>
@@ -233,16 +198,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-9 offset-md-3 col-lg-7 offset-lg-0">
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
                     <span id="l_anteil_eigenkapital_helpline" class="form-text">Wie hoch soll der Anteil vom Eigenkapital am Kaufpreis sein?</span>
                 </div>
             </div>
             <div class="row py-2 mt-1 align-items-center">
-                <div class="col-md-9 offset-md-3 col-lg-10 offset-lg-2">
+                <div class="col-lg-2 d-none d-lg-block">
+                </div>
+                <div class="col-12 col-md-9 col-lg-10">
                     <p class="fw-light fs-6">Die Ergebnisse sollen keine ausführliche Finanzierungsberatung ersetzen. Sie sollen eine Orientierung bieten.</p>
                 </div>
-                <div class="col-md-9 offset-md-3 col-lg-10 offset-lg-2">
+                <div class="col-lg-2 d-none d-lg-block">
+                </div>
+                <div class="col-12 col-md-3 col-lg-3 text-start text-md-end text-lg-start">
                     <button type="submit" id="calculate" class="btn btn-primary btn-sm">Berechnen</button>
+                </div>
+                <div class="col-lg-7 d-none d-lg-block">
                 </div>
             </div>
         </div>
@@ -251,13 +223,137 @@
     <div class="container-fluid my-2" id="result-container">
         <div class="container bg-light py-2">
             <div class="row py-1 align-items-center">
-                <div class="col-md-9 offset-md-3 col-lg-10 offset-lg-2"><h3>Ergebnisse</h3></div>
+                <div class="col-md-8 col-lg-2"></div>
+                <div class="col-md-9 col-lg-3"><h3>Ergebnisse</h3></div>
+                <div class="col-md-9 col-lg-7"></div>
             </div>
-            <div id="result-fields"></div>
+            <div class="row py-1 align-items-center container-leistbarkeit">
+                <div class="col-md-3 col-lg-2 text-md-end">
+                    <label for="l_kaufpreis" class="col-form-label">Kaufpreis:</label>
+                </div>
+                <div class="col-md-9 col-lg-3">
+                    <div class="input-group">
+                        <input type="text" id="l_kaufpreis" name="kaufpreis" class="form-control rightnumber" readonly>
+                        <span class="input-group-text fw-bold">€</span>
+                    </div>
+                </div>
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
+                    <span id="l_kaufpreis_helpline" class="form-text">maximaler Kaufpreis in Euro</span>
+                </div>
+            </div>
             <div class="row py-1 align-items-center">
-                <div class="col-md-9 offset-md-3 col-lg-10 offset-lg-2">
+                <div class="col-md-3 col-lg-2 text-md-end">
+                    <label for="gesamtkosten" class="col-form-label">Gesamtkosten:</label>
+                </div>
+                <div class="col-md-9 col-lg-3">
+                    <div class="input-group">
+                        <input type="text" id="gesamtkosten" name="gesamtkosten" class="form-control rightnumber" readonly>
+                        <span class="input-group-text fw-bold">€</span>
+                    </div>
+                </div>
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
+                    <span id="gesamtkosten_helpline" class="form-text">Gesamtkosten in Euro</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center container-belastung">
+                <div class="col-md-3 col-lg-2 text-md-end">
+                    <label for="e_eigenkapital_benoetigt" class="col-form-label">Eigenkapital:</label>
+                </div>
+                <div class="col-md-9 col-lg-3">
+                    <div class="input-group">
+                        <input type="text" id="e_eigenkapital_benoetigt" name="eigenkapital_benoetigt" class="form-control rightnumber" readonly>
+                        <span class="input-group-text fw-bold">€</span>
+                    </div>
+                </div>
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
+                    <span id="e_eigenkapital_benoetigt_helpline" class="form-text"></span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-3 col-lg-2 text-md-end">
+                    <label for="kredithoehe" class="col-form-label">Kredithöhe:</label>
+                </div>
+                <div class="col-md-9 col-lg-3">
+                    <div class="input-group">
+                        <input type="text" id="kredithoehe" name="kredithoehe" class="form-control rightnumber" readonly>
+                        <span class="input-group-text fw-bold">€</span>
+                    </div>
+                </div>
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
+                    <span id="kredithoehe_helpline" class="form-text"></span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center container-leistbarkeit">
+                <div class="col-md-3 col-lg-2 text-md-end">
+                    <label for="l_eigenkapitalanteil_final" class="col-form-label">Eigen&shy;kapital&shy;anteil am Kaufpreis:</label>
+                </div>
+                <div class="col-md-9 col-lg-3">
+                    <div class="input-group">
+                        <input type="text" id="l_eigenkapitalanteil_final" name="eigenkapitalanteil_final" class="form-control rightnumber" readonly>
+                        <span class="input-group-text fw-bold">%</span>
+                    </div>
+                </div>
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
+                    <span id="l_eigenkapitalanteil_final_helpline" class="form-text">Höhe des Eigenkapitals am Kaufpreis</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-3 col-lg-2 text-md-end">
+                    <label for="kreditbelastung" class="col-form-label">Kredit&shy;belastung pro Monat:</label>
+                </div>
+                <div class="col-md-9 col-lg-3">
+                    <div class="input-group">
+                        <input type="text" id="kreditbelastung" name="kreditbelastung" class="form-control rightnumber" readonly>
+                        <span class="input-group-text fw-bold">€</span>
+                    </div>
+                </div>
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
+                    <span id="kreditbelastung_helpline" class="form-text">Kreditbelastung pro Monat in Euro</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-3 col-lg-2 text-md-end">
+                    <label for="kreditbelastung-anteil" class="col-form-label">Anteil Kredit&shy;belastung am Einkommen:</label>
+                </div>
+                <div class="col-md-9 col-lg-3">
+                    <div class="input-group">
+                        <input type="text" id="kreditbelastung-anteil" name="kreditbelastung-anteil" class="form-control rightnumber" readonly>
+                        <span class="input-group-text fw-bold">%</span>
+                    </div>
+                </div>
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
+                    <span id="kreditbelastung-anteil_helpline" class="form-text">anteilige Kreditbelastung am Einkommen in Prozent</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-3 col-lg-2 text-md-end">
+                    <label for="rueckzahlungsdauer" class="col-form-label">Rück&shy;zahlungs&shy;dauer des Kredits:</label>
+                </div>
+                <div class="col-md-9 col-lg-3">
+                    <div class="input-group">
+                        <input type="text" id="rueckzahlungsdauer" name="rueckzahlungsdauer" class="form-control rightnumber" readonly>
+                        <span class="input-group-text fw-bold"></span>
+                    </div>
+                </div>
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7">
+                    <span id="rueckzahlungsdauer_helpline" class="form-text">Dauer in Jahren, bis der Kredit zurückgezahlt wäre</span>
+                </div>
+            </div>
+            <div class="row py-1 align-items-center">
+                <div class="col-md-3 col-lg-2"></div>
+                <div class="col-md-9 col-lg-3 text-end text-lg-start">
                     <button type="button" id="print" class="btn btn-outline-secondary btn-sm" onclick="window.print()">Druckvorschau</button>
                 </div>
+                <div class="col-md-3 d-none d-md-block d-lg-none d-xl-none d-xxl-none"></div>
+                <div class="col-md-9 col-lg-7"></div>
             </div>
         </div>
     </div>
@@ -266,9 +362,9 @@
 
     <div class="container-fluid my-2 collapse" id="datenschutz"><div class="container bg-light p-3"><h5>Datenschutzerklärung</h5><h6>Datenerhebung</h6><p>Es werden keine Daten von der Betreiberin erhoben.</p><h6>Betreiberin und verantwortliche Stelle</h6><p>Siehe IVD Impressum</p><h6>Hosting</h6><p>Unser Hoster erhebt in sog. Logfiles folgende Daten, die Ihr Browser übermittelt:</p><p>IP-Adresse, die Adresse der vorher besuchten Website (Referer Anfrage-Header), Datum und Uhrzeit der Anfrage, Zeitzonendifferenz zur Greenwich Mean Time, Inhalt der Anforderung, HTTP-Statuscode, übertragene Datenmenge, Website, von der die Anforderung kommt und Informationen zu Browser und Betriebssystem.</p><p>Das ist erforderlich, um unsere Website anzuzeigen und die Stabilität und Sicherheit zu gewährleisten. Dies entspricht unserem berechtigten Interesse im Sinne des Art. 6 Abs. 1 S. 1 lit. f DSGVO.</p><p>Es erfolgt kein Tracking und wir haben auf diese Daten keinen direkten Zugriff, sondern erhalten lediglich eine anonymisierte, statistische Zusammenfassung. Diese beinhaltet die Adresse der vorher besuchten Seite, die Häufigkeit der jeweils aufgerufenen Seiten und die Anzahl eindeutiger Besucher. Diese Daten führen wir nicht mit anderen Daten zusammen.</p><p>Wir setzen für die Zurverfügungstellung unserer Website folgenden Hoster ein:</p><p>GitHub Inc.<br>88 Colin P Kelly Jr St<br>San Francisco, CA 94107<br>United States</p><p>Dieser ist Empfänger Ihrer personenbezogenen Daten. Dies entspricht unserem berechtigten Interesse im Sinne des Art. 6 Abs. 1 S. 1 lit. f DSGVO, selbst keinen Server in unseren Räumlichkeiten vorhalten zu müssen. Serverstandort ist USA.</p><p>Weitere Informationen zu Widerspruchs- und Beseitigungsmöglichkeiten gegenüber GitHub finden Sie unter: https://docs.github.com/en/free-pro-team@latest/github/site-policy/github-privacy-statement#github-pages</p><p>Sie haben das Recht der Verarbeitung zu widersprechen. Ob der Widerspruch erfolgreich ist, ist im Rahmen einer Interessenabwägung zu ermitteln.</p><p>Die Daten werden gelöscht, sobald der Zweck der Verarbeitung entfällt.</p><p>Die Verarbeitung der unter diesem Abschnitt angegebenen Daten ist weder gesetzlich noch vertraglich vorgeschrieben. Die Funktionsfähigkeit der Website ist ohne die Verarbeitung nicht gewährleistet.</p><p>GitHub hat Compliance-Maßnahmen für internationale Datenübermittlungen umgesetzt. Diese gelten für alle weltweiten Aktivitäten, bei denen GitHub personenbezogene Daten von natürlichen Personen in der EU verarbeitet. Diese Maßnahmen basieren auf den EU-Standardvertragsklauseln (SCCs). Weitere Informationen finden Sie unter: https://docs.github.com/en/free-pro-team@latest/github/site-policy/github-data-protection-addendum#attachment-1–the-standard-contractual-clauses-processors</p><h5>Rechtliche Hinweise</h5><p>Grundsätzlich ist ein Auftragsverarbeitungsvertrag mit dem Hoster abzuschließen. Für das Hosting rein statischer Websites besteht grundsätzlich eine Ausnahme. Für den Fall, dass die Webseite der Selbstdarstellung dient, z.B. von Vereinen oder Kleinunternehmen, keine personenbezogenen Daten an den Betreiber fließen und kein Tracking stattfindet, liegt keine Auftragsverarbeitung vor. Die Tatsache, dass auch beim Hosting von statischen Webseiten zwangsläufig IP-Adressen, d.h. personenbezogene Daten, verarbeitet werden müssen, führt nicht zur Annahme einer Auftragsverarbeitung. Das wäre nicht sachgerecht. Die (kurzfristige) IP-Adressenspeicherung ist vielmehr noch der TK-Zugangsvermittlung des Website-Hosters nach dem TKG zuzurechnen und dient in erster Linie Sicherheitszwecken des Hosters.</p></div></div>
 
-    <script src="rechner_2.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script>window.bootstrap || document.write('<script src="static/bootstrap_5-3-3/js/bootstrap.bundle.min.js"><\/script>')</script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="rechner_alt.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <script src="api_params.js"></script>
 </body>
 </html>
