@@ -9,17 +9,30 @@ let tilgungssatz_input = $("#tilgungssatz");
 let eigenkapital_input = $("#eigenkapital");
 let zinsvergleich1 = $("#zinsvergleich1");
 let zinsvergleich2 = $("#zinsvergleich2");
+let zinsvergleich_container = $("#zinsvergleich-container");
+let zinsvergleich_unavailable_hint = $("#zinsvergleich-unavailable-hint");
 
 let vergleich_dates = null;
 let latest_bundesbank_value = null;
 let monat_jahr_dict = {};
 let bundesbank_zinsen = {};
 
-window.onload = function() {
-    bundesbank_request();
-    set_date_options();
+const BUNDESBANK_TIMEOUT_MS = 5000;
+
+window.onload = async function() {
+    await bundesbank_request();
+    if (Object.keys(bundesbank_zinsen).length > 0) {
+        set_date_options();
+        zinsvergleich_container.show();
+        zinsvergleich_unavailable_hint.hide();
+        if (latest_bundesbank_value !== null) {
+            zinssatz_input.val(latest_bundesbank_value);
+        }
+    } else {
+        zinsvergleich_container.hide();
+        zinsvergleich_unavailable_hint.show();
+    }
     set_annuitaet();
-    zinssatz_input.val(latest_bundesbank_value);
 };
 
 belastung_pm_input.change(function () {
@@ -67,34 +80,27 @@ function split_year_month(input_string) {
     return [year, month];
 }
 
-function bundesbank_request() {
-    $.ajax({
-        type: "GET",
-        async: false,
-        url: "https://api.statistiken.bundesbank.de/rest/data/BBIM1/M.DE.B.A2C.O.R.A.2250.EUR.N?detail=dataonly", // ?startPeriod=" + vergleich_dates[0] + "&endPeriod=" + vergleich_dates[1] + "&detail=dataonly",
-        contentType: 'application/json',
-        dataType: "json",
-        success: function (result, status, xhr) {
-            const result_prearray = xhr["responseJSON"]["data"]["dataSets"]["0"]["series"];
-            const result_array = result_prearray[Object.keys(result_prearray)[0]]["observations"]; // unnötiger Umweg, weil key in diesem Schritt kryptisch (eventuell fehlerhaft)
-            const results = xhr["responseJSON"]["data"]["structure"]["dimensions"]["observation"][0]["values"]
-            let position = 0;
-            for (let key in result_array) {
-                let zins = result_array[key];
-                let date = split_year_month(results[position]["id"]);
-                if (date[1] === 1) {
-                    bundesbank_zinsen[date[0]] = [zins[0]];
-                } else {
-                    bundesbank_zinsen[date[0]].push(zins[0]);
-                }
-                latest_bundesbank_value = zins[0];
-                position++;
-            }
-        },
-        error: function (xhr, status, error) {
-            alert("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText);
+async function bundesbank_request() {
+    const controller = new AbortController();
+    const timeout_id = setTimeout(() => controller.abort(), BUNDESBANK_TIMEOUT_MS);
+    try {
+        const response = await fetch(
+            "https://api.statistiken.bundesbank.de/rest/data/BBIM1/M.DE.B.A2C.O.R.A.2250.EUR.N?detail=dataonly",
+            {headers: {"Accept": "application/json"}, signal: controller.signal}
+        );
+        if (!response.ok) {
+            throw new Error("Bundesbank API antwortete mit Status " + response.status);
         }
-    });
+        const body = await response.json();
+        const parsed = IvdCalc.parseBundesbankResponse(body);
+        bundesbank_zinsen = parsed.zinsen;
+        latest_bundesbank_value = parsed.neuester;
+    } catch (error) {
+        bundesbank_zinsen = {};
+        latest_bundesbank_value = null;
+    } finally {
+        clearTimeout(timeout_id);
+    }
 }
 
 // $(document).ajaxStart(function () {
@@ -114,8 +120,8 @@ function year_month(year, month) {
 }
 
 function set_date_options() {
-    zinsvergleich1.innerHTML = "";
-    zinsvergleich2.innerHTML = "";
+    zinsvergleich1.empty();
+    zinsvergleich2.empty();
     const date = new Date();
     const current_month = date.getMonth()+1; // startet bei 0
     const current_year = date.getFullYear();
@@ -127,10 +133,12 @@ function set_date_options() {
         9: "September", 10: "Oktober", 11: "November", 12: "Dezember",
     }
     for (let jahr in bundesbank_zinsen) {
-        let monat = 1;
-        for (monat; monat <= bundesbank_zinsen[jahr].length; monat++) {
-            if (jahr === current_year && monat >= current_month -3) {
+        for (let monat = 1; monat <= bundesbank_zinsen[jahr].length; monat++) {
+            if (parseInt(jahr, 10) === current_year && monat >= current_month - 3) {
                 break;
+            }
+            if (bundesbank_zinsen[jahr][monat - 1] === undefined) {
+                continue;
             }
             let value = year_month(jahr, monat);
             let monat_name = month_names[monat];
@@ -154,19 +162,6 @@ function get_dates() {
     let d1 = zinsvergleich1.val();
     let d2 = zinsvergleich2.val();
     return [d1, d2];
-}
-
-/**
- * Kalkurliert Rückzahlungsdauer eine Annuitätendarlehens auf monatlicher Basis
- * @param kredit in 0_000.00
- * @param annuitaet in 0_000.00
- * @param zinssatz in 0.00
- * @returns {number} in 0.00
- */
-function calculate_rueckzahlungsdauer(kredit, annuitaet, zinssatz) {
-    // Annuität pro Monat
-    zinssatz = zinssatz / 12;
-    return ((Math.log(annuitaet) - Math.log(annuitaet - (zinssatz * kredit))) / Math.log(1 + zinssatz)) / 12;
 }
 
 function validate_inputs() {
@@ -208,30 +203,29 @@ function get_input_dict() {
  * @returns {{preis: string, rueckzahlungsdauer: string, zinssatz: string, eigenkapital_anteilig: string, gesamtkosten: string, betriebskosten, eigenkapital_anteilig_warning: boolean, fremdkapital: string}}
  */
 function calculator(inputs, calculate_betriebskosten) {
-    let fremdkapital = (inputs.kreditbelastung_pm * 12) / (inputs.zinssatz_prozent + inputs.tilgungssatz_prozent);
-    let gesamtkosten = fremdkapital + inputs.eigenkapital;
-    let preis = gesamtkosten / (1 + inputs.nebenkosten_prozent);
-    let rueckzahlungsdauer = calculate_rueckzahlungsdauer(fremdkapital, inputs.kreditbelastung_pm, inputs.zinssatz_prozent);
-    let eigenkapital_anteilig = 1 - (fremdkapital / preis);
-    let eigenkapital_anteilig_warning = false;
+    let ergebnis = IvdCalc.einkauf({
+        nebenkosten_prozent: inputs.nebenkosten_prozent,
+        kreditbelastung_pm: inputs.kreditbelastung_pm,
+        zinssatz_prozent: inputs.zinssatz_prozent,
+        tilgungssatz_prozent: inputs.tilgungssatz_prozent,
+        eigenkapital: inputs.eigenkapital,
+        betriebskosten: inputs.betriebskosten,
+    });
+
     let betriebskosten;
     if (calculate_betriebskosten) {
-        betriebskosten = (inputs.betriebskosten + inputs.kreditbelastung_pm).toLocaleString("de-DE", { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
-    }
-
-    if (eigenkapital_anteilig < 0) {
-        eigenkapital_anteilig = 0;
-        eigenkapital_anteilig_warning = true;
+        betriebskosten = ergebnis.betriebskosten_gesamt.toLocaleString("de-DE", { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
     }
 
     return {
-        "preis": preis.toLocaleString("de-DE", { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }),
-        "gesamtkosten": gesamtkosten.toLocaleString("de-DE", { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }),
-        "fremdkapital": fremdkapital.toLocaleString("de-DE", { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }),
-        "rueckzahlungsdauer": rueckzahlungsdauer.toLocaleString("de-DE", { style: 'decimal', maximumFractionDigits: 1 }),
-        "eigenkapital_anteilig_warning": eigenkapital_anteilig_warning,
-        "eigenkapital_anteilig": eigenkapital_anteilig.toLocaleString("de-DE", { style: 'percent', maximumFractionDigits: 1 }),
-        "zinssatz": inputs.zinssatz_prozent.toLocaleString("de-DE", { style: 'percent', maximumFractionDigits: 2 }),
+        "preis": ergebnis.preis.toLocaleString("de-DE", { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }),
+        "gesamtkosten": ergebnis.gesamtkosten.toLocaleString("de-DE", { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }),
+        "fremdkapital": ergebnis.fremdkapital.toLocaleString("de-DE", { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }),
+        "rueckzahlungsdauer": ergebnis.rueckzahlungsdauer.toLocaleString("de-DE", { style: 'decimal', maximumFractionDigits: 1 }),
+        "eigenkapital_anteilig_warning": ergebnis.eigenkapital_anteilig_warning,
+        "eigenkapital_anteilig": ergebnis.eigenkapital_anteilig.toLocaleString("de-DE", { style: 'percent', maximumFractionDigits: 1 }),
+        "zinssatz": ergebnis.zinssatz_prozent.toLocaleString("de-DE", { style: 'percent', maximumFractionDigits: 2 }),
+        "zinssatz_raw": ergebnis.zinssatz_prozent,
         "betriebskosten": betriebskosten,
     };
 }
@@ -268,7 +262,7 @@ function set_results(results, first_comparison, second_comparison) {
         fchd.removeClass("bg-warning");
         fchd.removeClass("bg-success");
         fchd.removeClass("text-white");
-        if (first_comparison.zinssatz > results.zinssatz) {
+        if (first_comparison.zinssatz_raw > results.zinssatz_raw) {
             fchd.addClass("bg-warning");
         } else {
             fchd.addClass("bg-success");
@@ -294,7 +288,7 @@ function set_results(results, first_comparison, second_comparison) {
         schd.removeClass("bg-warning");
         schd.removeClass("bg-success");
         schd.removeClass("text-white");
-        if (second_comparison.zinssatz > results.zinssatz) {
+        if (second_comparison.zinssatz_raw > results.zinssatz_raw) {
             schd.addClass("bg-warning");
         } else {
             schd.addClass("bg-success");

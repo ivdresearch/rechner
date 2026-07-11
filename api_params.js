@@ -27,8 +27,8 @@ $( document ).ready(function() {
     //     $("#footer").remove();
     // }
     let logo_url = urlParams.get("logo_url");
-    if (typeof logo_url === "string" && logo_url.length > 0) {
+    if (typeof logo_url === "string" && logo_url.startsWith("https://")) {
         $('#headline_bar').prepend('<div class="col-sm-auto ps-0 py-3 pe-3" id="headline_user_logo"></div>');
-        $('#headline_user_logo').html($('<img>', {id: 'UserLogo', src: decodeURIComponent(logo_url), style: "max-height:60px;"}));
+        $('#headline_user_logo').html($('<img>', {id: 'UserLogo', src: logo_url, style: "max-height:60px;"}));
     }
 });

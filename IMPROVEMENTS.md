@@ -1,0 +1,79 @@
+# Improvements
+
+_Stand: 2026-07-11, aktualisiert nach Sprint-Umsetzung_
+
+## Sprint-Ergebnis (Zusammenfassung)
+
+Ein umfangreicher Sprint wurde umgesetzt (Details im Sprint-Plan). Kernergebnisse:
+
+- **Keine externen CDNs mehr**: Bootstrap und jQuery werden auf allen vier HTML-Seiten (`rechner.html`, `einkaufsrechner.html`, `konfigurator.html`, `rechner_alt.html`) ausschließlich aus `static/` ausgeliefert. Verifiziert per Grep (keine `cdn.jsdelivr.net`/`code.jquery.com`-Referenzen mehr) und per lokalem HTTP-Server (alle Asset-Pfade liefern 200).
+- **Bundesbank-Anbindung robuster**: `bundesbank_request()` nutzt jetzt `fetch()` mit Timeout statt synchronem `$.ajax`, kein blockierendes `alert()` mehr im Fehlerfall, Default-Zinssatz bleibt erhalten, Zinsvergleich wird bei fehlenden Daten ausgeblendet. Parsing härter (Observation-Key als Index, `parseFloat`, monatsindizierte Jahres-Arrays).
+- **Rechenlogik konsolidiert**: Gemeinsame, DOM-freie Funktionen in `calc.js` extrahiert (`rueckzahlungsdauer`, `restschuld`, `belastung`, `leistbarkeit`, `einkauf`, `parseBundesbankResponse`), von beiden Rechnern genutzt.
+- **13 automatisierte Tests** (`node --test`, keine npm-Abhängigkeiten) decken Annuität/Restschuld-Referenzwerte, alle dokumentierten Grenzfälle (Zinssatz 0, Tilgung 0, Einkommen 0, vollständige Tilgung) sowie den Bundesbank-Parser (durchgehend/Lücke/Nicht-Januar-Start) ab. CI via `.github/workflows/test.yml`.
+- Diverse Korrektheits-Fixes (Zinsvergleich-Farblogik, Zahlenformatierung, tote Parameter) und Repo-Hygiene (`.idea` nicht mehr getrackt, Datenschutzerklärung dedupliziert).
+
+**Wichtiger Hinweis zur Validierung:** In dieser Session stand kein verbundener Browser zur Verfügung. Die Änderungen wurden durch automatisierte Tests, `node --check` (Syntax) und einen lokalen HTTP-Server (Asset-Erreichbarkeit, HTML-Parsing) verifiziert — **nicht** durch manuelles Durchklicken im Browser. Vor dem Deployment sollte manuell geprüft werden:
+
+1. Visuelle Regression auf `einkaufsrechner.html`, `konfigurator.html`, `rechner_alt.html` durch den Bootstrap-Versionssprung 5.2.3 → 5.3.3.
+2. Bundesbank-Offline-Verhalten im echten Browser (DevTools-Netzwerk-Drosselung „Offline"): Default-Zinssatz 3.5, kein Alert, Vergleichskarten ausgeblendet.
+3. Datenschutzerklärung: Collapse-Panel auf allen vier Seiten öffnen, Text muss per `fetch()` nachgeladen werden (erfordert echten HTTP-Server, nicht `file://`).
+
+## Prioritätsübersicht
+
+| Priorität | Anzahl | Schwerpunkt |
+| --- | ---: | --- |
+| P0 | 0 | – |
+| P1 | 1 | Credential-Hygiene (manueller Schritt) |
+| P2 | 1 | Offene Design-Entscheidung URL-Parametrisierung |
+| P3 | 1 | Altseite `rechner_alt.html`/`.js` |
+
+## P0 — Kritisch
+
+Keine bestätigten Befunde.
+
+## P1 — Hoch
+
+### [P1-001] GitHub Personal Access Token im Klartext in der lokalen Git-Remote-URL
+
+**Status:** Offen — nicht durch Code-Änderung lösbar
+**Bereich:** Sicherheit
+**Evidenz:** `.git/config` — die Remote-URL für `origin` enthält ein GitHub Personal Access Token (Typ `ghp_…`) als eingebettete Zugangsdaten. Nicht im Repository committet, nur in der lokalen Arbeitskopie.
+**Empfehlung:** Token auf GitHub widerrufen/rotieren, Remote-URL ohne Zugangsdaten neu setzen (`git remote set-url origin https://github.com/ivdresearch/rechner.git`), Authentifizierung dem Git Credential Manager überlassen. Neues Token minimal scopen (Fine-grained PAT, nur dieses Repo, nur `contents:write`).
+**Validierung:** `git remote -v` zeigt keine Zugangsdaten mehr; altes Token auf GitHub widerrufen.
+**Konfidenz:** Hoch
+
+## P2 — Mittel
+
+### [P2-005] Offene URL-Parametrisierung erlaubt Fremd-Branding unter der offiziellen Domain (Design-Entscheidung offen)
+
+**Status:** Teilweise behoben
+**Bereich:** Sicherheit
+**Umgesetzt:** `logo_url` erfordert jetzt `https://`-Präfix, die doppelte `decodeURIComponent`-Anwendung wurde entfernt (`api_params.js`).
+**Weiterhin offen:** Die eigentliche Design-Entscheidung — soll `titel` künftig mit einem festen Zusatz („– IVD Rechner") kombiniert oder die freie Betitelung als akzeptiertes Restrisiko dokumentiert bleiben? — ist eine Geschäfts-, keine reine Code-Entscheidung und wurde in diesem Sprint bewusst nicht getroffen.
+**Empfehlung:** Mit Stakeholdern klären und danach ggf. umsetzen.
+**Konfidenz:** Hoch
+
+## P3 — Niedrig
+
+### [P3-005] Altlasten im Deployment: `rechner_alt.html`/`rechner_alt.js` weiterhin öffentlich ausgeliefert
+
+**Status:** Teilweise behoben
+**Bereich:** Wartbarkeit
+**Umgesetzt:** `rechner_alt.html` wurde im Zuge der CDN-Migration ebenfalls auf lokal gehostetes Bootstrap/jQuery umgestellt (lädt also keine externen CDNs mehr) und nutzt jetzt ebenfalls die deduplizierte Datenschutzerklärung.
+**Weiterhin offen:** Ob die Seite noch von Kunden eingebunden wird, ist von hier aus nicht feststellbar (erfordert Referrer-Statistik des Hosters). Entfernen oder Redirect auf die aktuelle Version wurde daher bewusst nicht umgesetzt. `extract_classes.py` wurde bereits nach `tools/` verschoben.
+**Empfehlung:** Nutzungsdaten prüfen, danach entscheiden.
+**Konfidenz:** Mittel
+
+## Durchgeführte Prüfungen (Sprint-Umsetzung)
+
+- `node --test`: 13/13 Tests grün (Annuität/Restschuld-Referenzwerte, Grenzfälle, Bundesbank-Parser-Varianten, numerischer Zinssatz-Vergleich)
+- `node --check` auf allen geänderten JS-Dateien (Syntaxprüfung)
+- Lokaler HTTP-Server: alle referenzierten lokalen Asset-Pfade (HTML, JS, `static/`, `partials/`) liefern HTTP 200
+- HTML-Parsing-Check (Python `html.parser`) auf allen fünf HTML-Seiten: keine fatalen Parse-Fehler
+- Grep-Verifikation: keine verbleibenden Referenzen auf `cdn.jsdelivr.net`, `code.jquery.com`, das alte Dateinamensschema `rechner_2024-06-24.js` oder den toten `footer=false`-Parameter
+
+## Nicht geprüft / Grenzen dieser Sprint-Umsetzung
+
+- **Visuelle/manuelle Browser-Prüfung**: In dieser Session war kein verbundener Browser verfügbar (siehe Hinweis oben). Insbesondere der Bootstrap-Versionssprung auf drei Seiten und das Bundesbank-Offline-Verhalten sollten vor Deployment manuell im Browser geprüft werden.
+- **GitHub-Pages-/Repo-Einstellungen**: weiterhin kein Zugriff aus dieser Umgebung.
+- **Tatsächliche Kunden-Einbindungen**: weiterhin nur über Hoster-Statistiken feststellbar.

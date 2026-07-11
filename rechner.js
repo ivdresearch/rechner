@@ -5,9 +5,39 @@ const l_einkommenbelastung = $("#l_einkommenbelastung");
 const result_fields = $("#result-fields");
 
 $("#calculate").click(function() {
+    if (!validate_inputs()) {return;}
     if ($("#auswahl_berechnung_belastung").is(":checked")) {calculator_belastung()}
     else if ($("#auswahl_berechnung_leistbarkeit").is(":checked")) {calculator_leistbarkeit()}
 });
+
+function validate_inputs() {
+    let valid = true;
+
+    let tilgungssatz_helpline = $("#tilgungssatz_helpline");
+    if (parseFloat($("#tilgungssatz").val()) === 0) {
+        tilgungssatz_helpline.addClass("text-danger");
+        tilgungssatz_helpline.html("Tilgungssatz in Prozent<br>Achtung: Ohne Tilgung kann keine Rückzahlungsdauer berechnet werden");
+        valid = false;
+    } else {
+        tilgungssatz_helpline.removeClass("text-danger");
+        tilgungssatz_helpline.html("Tilgungssatz in Prozent");
+    }
+
+    let einkommen_helpline = $("#einkommen_helpline");
+    if (parseFloat($("#einkommen").val()) === 0) {
+        einkommen_helpline.addClass("text-danger");
+        einkommen_helpline.html("Nettoeinkommen in Euro<br>gegebenenfalls inkl. Kindergeld<br>Achtung: Ohne Einkommen kann keine Einkommensbelastung berechnet werden");
+        valid = false;
+    } else {
+        einkommen_helpline.removeClass("text-danger");
+        einkommen_helpline.html("Nettoeinkommen in Euro<br>gegebenenfalls inkl. Kindergeld");
+    }
+
+    if (!valid) {
+        $("#result-container").css("display", "none");
+    }
+    return valid;
+}
 
 $("#auswahl_berechnung_belastung").click(function() {
     result_fields.empty();
@@ -61,30 +91,13 @@ function reset_eigenkapital_prozent() {
     $("#eigenkapital_helpline").html("Eigenkapital in Prozent<br>Wie viel Eigenkapital anteilig am Kaufpreis kann aufgebracht werden? Beachten Sie, dass die Kaufnebenkosten ebenfalls aus Eigenkapital beglichen werden.");
 }
 
-function calculate_rueckzahlungsdauer(kredit, annuitaet, zinssatz) {
-    // Annuität pro Monat
-    zinssatz = zinssatz / 12;
-    return ((Math.log(annuitaet) - Math.log(annuitaet - (zinssatz * kredit))) / Math.log(1 + zinssatz)) / 12;
-}
-
 function calculator_belastung() {
     result_fields.empty();
 
     let preis = parseInt($("#e_preis").val(), 10);
     let nebenkosten = parseFloat($("#nebenkosten").val());
-    let gesamtkosten = preis * ((100 + nebenkosten) / 100);
-    let nebenkosten_summe = gesamtkosten - preis;
-
-    let fremdkapital;
     let eigenkapital_eingabe = parseFloat($("#eigenkapital").val());
-    let eigenkapital = eigenkapital_eingabe;
-    if (e_eigenkapital_prozent.prop("checked")) {
-        fremdkapital = preis * ((100 - eigenkapital) / 100);
-        eigenkapital = gesamtkosten - fremdkapital;
-    } else {
-        fremdkapital = gesamtkosten - eigenkapital;
-    }
-    let beleihungsauslauf = (fremdkapital / preis) * 100;
+    let eigenkapital_ist_prozent = e_eigenkapital_prozent.prop("checked");
 
     let einkommen = parseInt($("#einkommen").val(), 10);
     if ($("#einkommen_zeit_monatlich").prop("checked")) {
@@ -93,40 +106,37 @@ function calculator_belastung() {
 
     let zinssatz = parseFloat($("#zinssatz").val()) / 100;
     let tilgungssatz = parseFloat($("#tilgungssatz").val()) / 100;
-    let kreditbelastung_pa = fremdkapital * (zinssatz + tilgungssatz);
-    let kreditbelastung_pm = kreditbelastung_pa / 12;
-    let kreditbelastung_anteilig = kreditbelastung_pa * 100 / einkommen;
-    let rueckzahlungsdauer = calculate_rueckzahlungsdauer(fremdkapital, kreditbelastung_pm, zinssatz);
 
-    if (fremdkapital <= 0) {
-        fremdkapital = 0;
-        rueckzahlungsdauer = 0;
-        kreditbelastung_pa = 0;
-        kreditbelastung_pm = 0;
-        kreditbelastung_anteilig = 0;
-        beleihungsauslauf = 0;
-    }
+    let ergebnis = IvdCalc.belastung({
+        preis: preis,
+        nebenkosten_prozent: nebenkosten,
+        eigenkapital_eingabe: eigenkapital_eingabe,
+        eigenkapital_ist_prozent: eigenkapital_ist_prozent,
+        einkommen_jahr: einkommen,
+        zinssatz_prozent: zinssatz,
+        tilgungssatz_prozent: tilgungssatz,
+    });
 
-    create_result_gesamtkosten(gesamtkosten);
-    create_result_eigenkapital(eigenkapital);
-    create_result_kredithoehe(fremdkapital, "Kredithöhe in Euro<br>Dies entspricht einem Fremdkapitalanteil von <strong>" + beleihungsauslauf.toFixed().toLocaleString() + "</strong> Prozent am Kaufpreis.");
-    create_result_kreditbelastung(kreditbelastung_pm);
-    create_result_kreditbelastung_anteil(kreditbelastung_anteilig);
-    create_result_rueckzahlungsdauer(rueckzahlungsdauer);
+    create_result_gesamtkosten(ergebnis.gesamtkosten);
+    create_result_eigenkapital(ergebnis.eigenkapital);
+    create_result_kredithoehe(ergebnis.fremdkapital, "Kredithöhe in Euro<br>Dies entspricht einem Fremdkapitalanteil von <strong>" + ergebnis.beleihungsauslauf.toLocaleString("de-DE", {maximumFractionDigits: 1}) + "</strong> Prozent am Kaufpreis.");
+    create_result_kreditbelastung(ergebnis.kreditbelastung_pm);
+    create_result_kreditbelastung_anteil(ergebnis.kreditbelastung_anteilig);
+    create_result_rueckzahlungsdauer(ergebnis.rueckzahlungsdauer);
 
     const restschuld_jahre = [5, 10, 15];
     for (let jahr of restschuld_jahre) {
-        let rs = restschuld(fremdkapital, tilgungssatz, zinssatz, jahr);
+        let rs = IvdCalc.restschuld(ergebnis.fremdkapital, tilgungssatz, zinssatz, jahr);
         create_result_restschuld(rs, jahr);
     }
 
     let eigenkapitel_helpline = $("#e_eigenkapital_benoetigt_helpline");
-    if (eigenkapital < nebenkosten_summe) {
+    if (ergebnis.eigenkapital < ergebnis.nebenkosten_summe) {
         eigenkapitel_helpline.addClass("text-danger");
-        eigenkapitel_helpline.html('Eigenkapital in Euro<br>Das Eigenkapital sollte einen Betrag von <strong>' + nebenkosten_summe.toFixed().toLocaleString() + ' Euro </strong> nicht unterschreiten, damit die Nebenkosten gedeckt sind.');
-    } else if (e_eigenkapital_prozent.prop("checked")) {
+        eigenkapitel_helpline.html('Eigenkapital in Euro<br>Das Eigenkapital sollte einen Betrag von <strong>' + ergebnis.nebenkosten_summe.toLocaleString("de-DE", {maximumFractionDigits: 0}) + ' Euro </strong> nicht unterschreiten, damit die Nebenkosten gedeckt sind.');
+    } else if (eigenkapital_ist_prozent) {
         eigenkapitel_helpline.removeClass("text-danger");
-        eigenkapitel_helpline.html("Eigenkapital in Euro<br>Dies entspricht einem Eigenkapitalanteil von <strong>" + eigenkapital_eingabe.toFixed().toLocaleString() + "</strong> Prozent am Kaufpreis zzgl. der Kaufnebenkosten.");
+        eigenkapitel_helpline.html("Eigenkapital in Euro<br>Dies entspricht einem Eigenkapitalanteil von <strong>" + eigenkapital_eingabe.toLocaleString("de-DE", {maximumFractionDigits: 1}) + "</strong> Prozent am Kaufpreis zzgl. der Kaufnebenkosten.");
     } else {
         eigenkapitel_helpline.removeClass("text-danger");
         eigenkapitel_helpline.text("Eigenkapital in Euro");
@@ -141,7 +151,6 @@ function calculator_leistbarkeit() {
     let nebenkosten = parseFloat($("#nebenkosten").val());
     let eigenkapital = parseInt($("#eigenkapital").val(), 10);
     let eigenkapital_anteil = parseInt(l_anteil_eigenkapital.val(), 10);
-    let fremdkapital_anteil = 100 - eigenkapital_anteil;
 
     let einkommenbelastung = parseInt(l_einkommenbelastung.val(), 10);
     let einkommen = parseInt($("#einkommen").val(), 10);
@@ -149,103 +158,96 @@ function calculator_leistbarkeit() {
         einkommen *= 12;
     }
 
-    let annuitaet_max = einkommen * (einkommenbelastung / 100);
     let zinssatz = parseFloat($("#zinssatz").val()) / 100;
     let tilgungssatz = parseFloat($("#tilgungssatz").val()) / 100;
-    let fremdkapital_v1 = annuitaet_max / (zinssatz + tilgungssatz);
-    let fremdkapital_v2 = (eigenkapital * (fremdkapital_anteil / 100)) / ((nebenkosten + eigenkapital_anteil) / 100);
-    let fremdkapital = Math.min(fremdkapital_v1, fremdkapital_v2);
-    
-    let gesamtkosten = eigenkapital + fremdkapital;
-    let kaufpreis = gesamtkosten / (1 + (nebenkosten / 100));
-    let eigenkapital_anteil_final = (1 - (fremdkapital / kaufpreis)) * 100;
-    let annuitaet_pa = fremdkapital * (zinssatz + tilgungssatz);
-    let annuitaet_pm = annuitaet_pa / 12;
-    let einkommenbelastung_final = (annuitaet_pa / einkommen) * 100;
-    let rueckzahlungsdauer = calculate_rueckzahlungsdauer(fremdkapital, annuitaet_pm, zinssatz);
 
-    create_result_kaufpreis(kaufpreis);
-    create_result_gesamtkosten(gesamtkosten);
-    create_result_kredithoehe(fremdkapital, "Kredithöhe in Euro");
-    create_result_eigenkapitalanteil(eigenkapital_anteil_final);
-    create_result_kreditbelastung(annuitaet_pm);
-    create_result_kreditbelastung_anteil(einkommenbelastung_final);
-    create_result_rueckzahlungsdauer(rueckzahlungsdauer);
+    let ergebnis = IvdCalc.leistbarkeit({
+        nebenkosten_prozent: nebenkosten,
+        eigenkapital: eigenkapital,
+        eigenkapital_anteil_prozent: eigenkapital_anteil,
+        einkommenbelastung_prozent: einkommenbelastung,
+        einkommen_jahr: einkommen,
+        zinssatz_prozent: zinssatz,
+        tilgungssatz_prozent: tilgungssatz,
+    });
+
+    create_result_kaufpreis(ergebnis.kaufpreis);
+    create_result_gesamtkosten(ergebnis.gesamtkosten);
+    create_result_kredithoehe(ergebnis.fremdkapital, "Kredithöhe in Euro");
+    create_result_eigenkapitalanteil(ergebnis.eigenkapital_anteil_final);
+    create_result_kreditbelastung(ergebnis.annuitaet_pm);
+    create_result_kreditbelastung_anteil(ergebnis.einkommenbelastung_final);
+    create_result_rueckzahlungsdauer(ergebnis.rueckzahlungsdauer);
 
     const restschuld_jahre = [5, 10, 15];
     for (let jahr of restschuld_jahre) {
-        let rs = restschuld(fremdkapital, tilgungssatz, zinssatz, jahr);
+        let rs = IvdCalc.restschuld(ergebnis.fremdkapital, tilgungssatz, zinssatz, jahr);
         create_result_restschuld(rs, jahr);
     }
 
     $("#result-container").css("display", "block");
 }
 
-function restschuld(fremdkapital, tilgungssatz, zinssatz, jahre) {
-    let tilgung_monat1 = fremdkapital * tilgungssatz / 12;
-    return  fremdkapital - ((tilgung_monat1*(((1+zinssatz/12)**(jahre*12))-1))/(zinssatz/12));
-}
-
 function create_result_kaufpreis(wert) {
     let id_name = "kaufpreis";
     let label = "Kaufpreis:";
     let helptext = "maximaler Kaufpreis in Euro";
-    create_result(id_name, label, helptext, wert.toFixed().toLocaleString(), "€");
+    create_result(id_name, label, helptext, wert.toLocaleString("de-DE", {maximumFractionDigits: 0}), "€");
 }
 
 function create_result_gesamtkosten(wert) {
     let id_name = "gesamtkosten";
     let label = "Gesamtkosten:";
     let helptext = "Gesamtkosten in Euro";
-    create_result(id_name, label, helptext, wert.toFixed().toLocaleString(), "€");
+    create_result(id_name, label, helptext, wert.toLocaleString("de-DE", {maximumFractionDigits: 0}), "€");
 }
 
 function create_result_kredithoehe(wert, helptext) {
     let id_name = "kredithoehe";
     let label = "Kredithöhe:";
-    create_result(id_name, label, helptext, wert.toFixed().toLocaleString(), "€");
+    create_result(id_name, label, helptext, wert.toLocaleString("de-DE", {maximumFractionDigits: 0}), "€");
 }
 
 function create_result_eigenkapital(wert) {
     let id_name = "eigenkapital";
     let label = "Eigen&shy;kapital:";
     let helptext = "";
-    create_result(id_name, label, helptext, wert.toFixed().toLocaleString(), "€");
+    create_result(id_name, label, helptext, wert.toLocaleString("de-DE", {maximumFractionDigits: 0}), "€");
 }
 
 function create_result_eigenkapitalanteil(wert) {
     let id_name = "eigenkapitalanteil";
     let label = "Eigen&shy;kapital&shy;anteil am Kaufpreis:";
     let helptext = "Höhe des Eigenkapitals am Kaufpreis";
-    create_result(id_name, label, helptext, wert.toFixed(1).toLocaleString().replace(".", ","), "%");
+    create_result(id_name, label, helptext, wert.toLocaleString("de-DE", {maximumFractionDigits: 1}), "%");
 }
 
 function create_result_kreditbelastung(wert) {
     let id_name = "kreditbelastung";
     let label = "Kredit&shy;belastung pro Monat:";
     let helptext = "Kreditbelastung pro Monat in Euro";
-    create_result(id_name, label, helptext, wert.toFixed().toLocaleString(), "€");
+    create_result(id_name, label, helptext, wert.toLocaleString("de-DE", {maximumFractionDigits: 0}), "€");
 }
 
 function create_result_kreditbelastung_anteil(wert) {
     let id_name = "kreditbelastung-anteil";
     let label = "Anteil Kredit&shy;belastung am Einkommen:";
     let helptext = "anteilige Kreditbelastung am Einkommen in Prozent";
-    create_result(id_name, label, helptext, wert.toFixed(1).toLocaleString().replace(".", ","), "%");
+    create_result(id_name, label, helptext, wert.toLocaleString("de-DE", {maximumFractionDigits: 1}), "%");
 }
 
 function create_result_rueckzahlungsdauer(wert) {
     let id_name = "rueckzahlungsdauer";
     let label = "Rück&shy;zahlungs&shy;dauer des Kredits:";
     let helptext = "Dauer in Jahren, bis der Kredit zurückgezahlt wäre";
-    create_result(id_name, label, helptext, wert.toFixed(1).toLocaleString().replace(".", ","), "");
+    create_result(id_name, label, helptext, wert.toLocaleString("de-DE", {maximumFractionDigits: 1}), "");
 }
 
 function create_result_restschuld(wert, jahre) {
     let id_name = "restschuld" + jahre;
     let label = `Restschuld nach <strong>${jahre}</strong> Jahren:`;
     let helptext = `Restschuld des Darlehens nach einer Zinsbindung von ${jahre} Jahren.`;
-    create_result(id_name, label, helptext, wert.toFixed().toLocaleString(), "€");
+    create_result(id_name, label, helptext, wert.toLocaleString("de-DE", {maximumFractionDigits: 0}), "€");
 }
 
 function create_result(id_name, label, helptext, wert="", suffix="") {

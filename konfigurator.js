@@ -23,7 +23,7 @@ $(document).ready(function () {
             return;
         }
         
-        let params = ["footer=false"];
+        let params = [];
         let titel = titel_input.val();
         if (titel.length > 0) {
             params.push("titel=" + encodeURIComponent(titel));
