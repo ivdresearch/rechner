@@ -19,7 +19,63 @@
 
     <link href="static/bootstrap_5-3-3/css/bootstrap.min.css" rel="stylesheet" />
 
-    <style>.rightnumber{text-align: right;} .input-group .input-group-text{ width: 40px;} #result-container{display: none;}</style>
+    <style>
+        .rightnumber {
+            text-align: right;
+        }
+
+        .input-group .input-group-text {
+            width: 40px;
+        }
+
+        #result-container {
+            display: none;
+        }
+
+        @media print {
+            @page {
+                margin: 1.2cm;
+            }
+
+            body {
+                margin: 0;
+                padding: 0 !important;
+                min-width: 0;
+            }
+
+            .container-fluid,
+            .container {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 0 !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+
+            .row,
+            .card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .col-md-3, .col-md-9 {
+                float: left;
+            }
+            .col-md-9 {
+                width: 75%;
+            }
+            .col-md-3 {
+                width: 25%;
+            }
+            .offset-md-3 {
+                margin-left: 25%;
+            }
+
+            #calculate, #print {
+                display: none !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid my-2">

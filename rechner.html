@@ -33,15 +33,30 @@
         }
 
         @media print {
+            @page {
+                margin: 1.2cm;
+            }
+
             body {
                 margin: 0;
                 padding: 0 !important;
-                min-width: 768px;
+                min-width: 0;
             }
+
+            .container-fluid,
             .container {
-                width: auto;
-                min-width: 720px;
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 0 !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
             }
+
+            .row {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
             .col-md-3, .col-md-9 {
                 float: left;
             }
@@ -53,6 +68,10 @@
             }
             .offset-md-3 {
                 margin-left: 25%;
+            }
+
+            #calculate, #print {
+                display: none !important;
             }
         }
 
