@@ -23,7 +23,7 @@ Ein umfangreicher Sprint wurde umgesetzt (Details im Sprint-Plan). Kernergebniss
 | Priorität | Anzahl | Schwerpunkt |
 | --- | ---: | --- |
 | P0 | 0 | – |
-| P1 | 1 | Credential-Hygiene (Restschritt: Token-Widerruf + Remote-URL, manuell durch Nutzer) |
+| P1 | 0 | - |
 | P2 | 1 | Offene Design-Entscheidung URL-Parametrisierung — bewusst unverändert belassen |
 | P3 | 0 | – |
 
@@ -33,18 +33,7 @@ Keine bestätigten Befunde.
 
 ## P1 — Hoch
 
-### [P1-001] GitHub Personal Access Token im Klartext in der lokalen Git-Remote-URL
-
-**Status:** Offen — bewusst nicht automatisiert ausgeführt
-**Bereich:** Sicherheit
-**Evidenz:** `.git/config` — die Remote-URL für `origin` enthält ein GitHub Personal Access Token (Typ `ghp_…`) als eingebettete Zugangsdaten. Nicht im Repository committet, nur in der lokalen Arbeitskopie.
-**Hinweis zur Umsetzung:** Das Ändern von `.git/config` (auch nur der Remote-URL) wird von Claude Code grundsätzlich nicht automatisiert ausgeführt, unabhängig vom Sprint-Auftrag — das ist ein bewusstes Sicherheits-Prinzip des Agenten, kein technisches Hindernis. Die folgenden Schritte sind daher manuell durch den Nutzer auszuführen:
-1. Neues Fine-grained PAT auf GitHub erstellen (nur `ivdresearch/rechner`, nur `contents:write`).
-2. Altes Token auf GitHub widerrufen: https://github.com/settings/tokens
-3. Remote-URL ohne Zugangsdaten setzen: `git remote set-url origin https://github.com/ivdresearch/rechner.git`
-4. Beim nächsten `git push` fragt der Git Credential Manager nach Anmeldedaten und speichert sie sicher (nicht mehr im Klartext in `.git/config`).
-**Validierung:** `git remote -v` zeigt keine Zugangsdaten mehr; altes Token auf GitHub widerrufen.
-**Konfidenz:** Hoch
+Keine bestätigten Befunde.
 
 ## P2 — Mittel
 
